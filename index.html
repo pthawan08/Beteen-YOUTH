@@ -30,9 +30,20 @@
             background-image: 
                 radial-gradient(circle at 50% 50%, transparent 0%, rgba(255, 255, 255, 0.4) 100%),
                 repeating-linear-gradient(45deg, var(--pink-light) 0, var(--pink-light) 10px, var(--pink-bg) 10px, var(--pink-bg) 20px);
+            padding-top: 20px; /* เพิ่มพื้นที่ด้านบนสุดของ Body */
         }
 
-        .container { width: 100%; max-width: 500px; padding: 25px; box-sizing: border-box; position: relative; z-index: 1; }
+        .container { 
+            width: 100%; 
+            max-width: 500px; 
+            padding: 25px; 
+            box-sizing: border-box; 
+            position: relative; 
+            z-index: 1; 
+            /* เพิ่มระยะห่างด้านบนเพื่อให้ไม่บังหัวข้อ */
+            margin-top: 30px; 
+        }
+        
         .hidden { display: none !important; }
         .active { display: block !important; }
 
@@ -192,7 +203,8 @@
                     <span class="decor-btn" onclick="addEmoji('🎀')">🎀</span>
                     <span class="decor-btn" onclick="addEmoji('🧸')">🧸</span>
                     <span class="decor-btn" onclick="addEmoji('🍒')">🍒</span>
-                    <span class="decor-btn" onclick="addEmoji('')">❌</span> </div>
+                    <span class="decor-btn" onclick="addEmoji('')">❌</span>
+                </div>
                 
                 <button class="btn-primary" id="save-btn" onclick="generateFinal()">รับรูปและ QR Code 💌</button>
                 <button class="btn-secondary" onclick="location.reload()">เริ่มใหม่</button>
@@ -219,7 +231,7 @@
     <script>
         let photos = [];
         let stream = null;
-        let selectedBg = '6.jpg'; // เปลี่ยนค่าตั้งต้นเป็น .jpg
+        let selectedBg = '6.jpg';
         let currentLayout = { type: 'v2', count: 2, class: 'grid-v2' };
 
         function selectBg(element, bgFile) {
@@ -310,11 +322,9 @@
                 grid.appendChild(d);
             });
 
-            // ค่าเริ่มต้นเมื่อมาถึงหน้าตกแต่ง
             addEmoji('❤️');
         }
 
-        // ฟังก์ชันตกแต่ง (ล็อค 4 มุม) แทนที่ระบบลาก
         function addEmoji(emojiChar) {
             document.getElementById('decor-tl').innerText = emojiChar;
             document.getElementById('decor-tr').innerText = emojiChar;
