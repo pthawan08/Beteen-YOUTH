@@ -30,7 +30,6 @@
             background-image: 
                 radial-gradient(circle at 50% 50%, transparent 0%, rgba(255, 255, 255, 0.4) 100%),
                 repeating-linear-gradient(45deg, var(--pink-light) 0, var(--pink-light) 10px, var(--pink-bg) 10px, var(--pink-bg) 20px);
-            /* เพิ่มระยะห่างด้านบนสุดของเว็บ */
             padding-top: 20px; 
             box-sizing: border-box;
         }
@@ -42,7 +41,6 @@
             box-sizing: border-box; 
             position: relative; 
             z-index: 1; 
-            /* เพิ่มระยะห่างด้านบนเพื่อให้ไม่บังหัวข้อ */
             margin-top: 10px; 
         }
 
@@ -74,40 +72,42 @@
         }
         .layout-btn:hover { background: var(--pink-bg); transform: translateY(-3px); }
 
-        /* --- กรอบพรีวิวและรูปถ่าย (ส่วนที่แก้ไขเรื่องรูปบีบ) --- */
+        /* --- กรอบพรีวิวและรูปถ่าย --- */
         .frame-container {
-            /* บังคับสัดส่วนให้เป็นแนวตั้ง 2:3 ตามรูปต้นฉบับ */
             aspect-ratio: 2 / 3;
             width: 100%;
             max-width: 420px;
             margin: 0 auto 15px auto;
-            
             background-color: transparent; 
             background-size: cover; 
             background-position: center;
             border-radius: 8px; 
             position: relative; 
-            
-            /* ใช้ Flexbox เพื่อจัดให้รูปถ่ายอยู่กึ่งกลางกรอบเสมอ */
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 25px;
+            padding: 30px;
             box-sizing: border-box;
-            overflow: hidden;
+            /* เอา overflow: hidden ออกเพื่อให้สติกเกอร์ล้นขอบได้นิดๆ ดูมีมิติ */
         }
 
         .photo-grid-wrapper {
             position: relative; 
-            width: 85%; /* ขนาดของกลุ่มรูปถ่ายเมื่อเทียบกับกรอบพื้นหลัง */
+            width: 100%; 
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .photo-grid { 
-            display: grid; gap: 10px; position: relative; z-index: 2; width: 100%;
+            display: grid; gap: 8px; position: relative; z-index: 2; 
         }
-        .grid-v2 { grid-template-columns: 1fr; }
-        .grid-v4 { grid-template-columns: 1fr; }
-        .grid-2x2 { grid-template-columns: 1fr 1fr; }
+        
+        /* 🔥 แก้ไขตรงนี้: ปรับความกว้างให้ต่างกัน เพื่อไม่ให้ 4 ช่องแนวตั้งทะลุกรอบ 🔥 */
+        .grid-v2 { grid-template-columns: 1fr; width: 65%; }
+        .grid-v4 { grid-template-columns: 1fr; width: 40%; } /* แคบลงเพื่อให้ความสูงหดเข้ามาในกรอบ */
+        .grid-2x2 { grid-template-columns: 1fr 1fr; width: 85%; }
 
         .photo-slot { 
             width: 100%; background-color: #eee; background-size: cover; background-position: center; 
@@ -124,10 +124,10 @@
             filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.3));
             transition: all 0.3s ease;
         }
-        .decor-tl { top: -25px; left: -25px; transform: rotate(-15deg); }
-        .decor-tr { top: -25px; right: -25px; transform: rotate(15deg); }
-        .decor-bl { bottom: -25px; left: -25px; transform: rotate(-15deg); }
-        .decor-br { bottom: -25px; right: -25px; transform: rotate(15deg); }
+        .decor-tl { top: -15px; left: -15px; transform: rotate(-15deg); }
+        .decor-tr { top: -15px; right: -15px; transform: rotate(15deg); }
+        .decor-bl { bottom: -15px; left: -15px; transform: rotate(-15deg); }
+        .decor-br { bottom: -15px; right: -15px; transform: rotate(15deg); }
 
         .decor-options { display: flex; justify-content: space-around; font-size: 2rem; margin: 15px 0; cursor: pointer; }
         .decor-btn { transition: transform 0.2s; }
@@ -374,7 +374,6 @@
                 link.href = imageData; 
                 link.download = `CVC_Valentine_${Date.now()}.png`;
 
-                // สร้าง QR code (ลิงก์หน้าเว็บปัจจุบัน) เพื่อให้เพื่อนสแกนเข้ามาถ่ายรูปได้
                 new QRCode(document.getElementById("qrcode"), { text: window.location.href, width: 160, height: 160, colorDark : "#c9184a", colorLight : "#ffffff" });
 
             } catch (e) {
