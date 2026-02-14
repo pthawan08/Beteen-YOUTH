@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Satisfy&display=swap" rel="stylesheet">
     
     <style>
+        /* --- ตั้งค่าสีหลัก (ธีมวาเลนไทน์) --- */
         :root {
             --pink-bg: #ffccd5;
             --pink-light: #ffb3c1;
@@ -24,11 +25,12 @@
             display: flex;
             justify-content: center;
             min-height: 100vh;
+            color: #333;
             background-color: var(--pink-bg);
             background-image: 
                 radial-gradient(circle at 50% 50%, transparent 0%, rgba(255, 255, 255, 0.4) 100%),
                 repeating-linear-gradient(45deg, var(--pink-light) 0, var(--pink-light) 10px, var(--pink-bg) 10px, var(--pink-bg) 20px);
-            padding-top: 30px; 
+            padding-top: 20px; 
             box-sizing: border-box;
         }
 
@@ -47,85 +49,94 @@
 
         h1 {
             font-family: 'Satisfy', cursive; color: var(--red-love); font-size: 3.5rem; 
-            margin: 0; text-shadow: 2px 2px 0 var(--white); letter-spacing: 2px;
+            margin-bottom: 5px; margin-top: 0px; text-shadow: 2px 2px 0 var(--white); letter-spacing: 2px;
             line-height: 1.1;
         }
-        .subtitle { color: var(--red-love); font-weight: 700; margin-bottom: 20px; font-size: 1.1rem; }
+        p { color: var(--red-love); font-weight: 700; margin-top: 0; font-size: 1.1rem; }
 
         .content-box {
-            background: var(--cream); border-radius: 20px; padding: 20px;
+            background: var(--cream); border-radius: 15px; padding: 20px;
             border: 4px solid var(--pink-dark); box-shadow: 0 10px 30px rgba(201, 24, 74, 0.2);
         }
 
-        /* --- การเลือกพื้นหลัง --- */
+        /* --- การเลือกพื้นหลังและ Layout --- */
         .bg-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .bg-option { border: 4px solid transparent; border-radius: 12px; cursor: pointer; transition: 0.2s; overflow: hidden; background: white; }
+        .bg-option { border: 4px solid transparent; border-radius: 10px; cursor: pointer; transition: 0.2s; overflow: hidden; }
         .bg-option.selected { border-color: var(--red-love); transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .bg-option img { width: 100%; display: block; }
 
         .layout-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .layout-btn {
-            background: #fff; border: 2px solid var(--pink-light); border-radius: 10px; padding: 15px 10px; 
+            background: #fff; border: 2px solid var(--pink-light); border-radius: 8px; padding: 15px 10px; 
             cursor: pointer; font-weight: 700; color: var(--red-love); font-family: 'Mali', cursive; transition: 0.2s;
         }
         .layout-btn:hover { background: var(--pink-bg); transform: translateY(-3px); }
 
-        /* --- 🔥 ส่วนที่แก้ไข: ปรับกรอบพรีวิวให้เว้นที่ด้านบน 🔥 --- */
+        /* --- กรอบพรีวิวและรูปถ่าย --- */
         .frame-container {
             aspect-ratio: 2 / 3;
             width: 100%;
             max-width: 420px;
-            margin: 0 auto 20px auto;
-            background-color: white; 
+            margin: 0 auto 15px auto;
+            background-color: transparent; 
             background-size: cover; 
             background-position: center;
-            border-radius: 10px; 
+            border-radius: 8px; 
             position: relative; 
             display: flex;
-            align-items: flex-end; /* ดันรูปลงมาด้านล่าง */
+            align-items: center;
             justify-content: center;
-            padding: 40px 20px; /* เว้นระยะขอบในกรอบ */
+            padding: 30px;
             box-sizing: border-box;
-            border: 2px solid var(--pink-dark);
+            /* เอา overflow: hidden ออกเพื่อให้สติกเกอร์ล้นขอบได้นิดๆ ดูมีมิติ */
         }
 
         .photo-grid-wrapper {
             position: relative; 
-            width: 100%;
-            margin-bottom: 20px; /* ขยับรูปขึ้นจากขอบล่างนิดหน่อย */
+            width: 100%; 
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .photo-grid { 
-            display: grid; gap: 8px; position: relative; z-index: 2; margin: 0 auto;
+            display: grid; gap: 8px; position: relative; z-index: 2; 
         }
         
-        /* ปรับความกว้างของแต่ละแบบให้พอดี ไม่บังคำอวยพรด้านบน */
-        .grid-v2 { grid-template-columns: 1fr; width: 60%; }
-        .grid-v4 { grid-template-columns: 1fr; width: 35%; } 
-        .grid-grid { grid-template-columns: 1fr 1fr; width: 85%; }
+        /* 🔥 แก้ไขตรงนี้: ปรับความกว้างให้ต่างกัน เพื่อไม่ให้ 4 ช่องแนวตั้งทะลุกรอบ 🔥 */
+        .grid-v2 { grid-template-columns: 1fr; width: 65%; }
+        .grid-v4 { grid-template-columns: 1fr; width: 40%; } /* แคบลงเพื่อให้ความสูงหดเข้ามาในกรอบ */
+        .grid-2x2 { grid-template-columns: 1fr 1fr; width: 85%; }
 
         .photo-slot { 
             width: 100%; background-color: #eee; background-size: cover; background-position: center; 
             border: 3px solid white; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         .grid-v2 .photo-slot, .grid-v4 .photo-slot { aspect-ratio: 4/3; }
-        .grid-grid .photo-slot { aspect-ratio: 1/1; }
+        .grid-2x2 .photo-slot { aspect-ratio: 1/1; }
 
-        /* --- Emoji เกาะมุมรูป --- */
+        /* --- ของตกแต่ง (ล็อคตำแหน่งมุมรูป) --- */
         .decor {
-            position: absolute; font-size: 40px; z-index: 10;
-            filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.3));
+            position: absolute;
+            font-size: 45px;
+            z-index: 10;
+            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.3));
             transition: all 0.3s ease;
         }
-        .decor-tl { top: -20px; left: -20px; transform: rotate(-15deg); }
-        .decor-tr { top: -20px; right: -20px; transform: rotate(15deg); }
-        .decor-bl { bottom: -20px; left: -20px; transform: rotate(-15deg); }
-        .decor-br { bottom: -20px; right: -20px; transform: rotate(15deg); }
+        .decor-tl { top: -15px; left: -15px; transform: rotate(-15deg); }
+        .decor-tr { top: -15px; right: -15px; transform: rotate(15deg); }
+        .decor-bl { bottom: -15px; left: -15px; transform: rotate(-15deg); }
+        .decor-br { bottom: -15px; right: -15px; transform: rotate(15deg); }
 
-        /* --- Camera & Buttons --- */
+        .decor-options { display: flex; justify-content: space-around; font-size: 2rem; margin: 15px 0; cursor: pointer; }
+        .decor-btn { transition: transform 0.2s; }
+        .decor-btn:hover { transform: scale(1.3); }
+
+        /* --- จอกล้อง --- */
         .camera-wrapper {
             position: relative; width: 100%; padding-bottom: 133.33%; background: #000; 
-            border-radius: 15px; overflow: hidden; margin-bottom: 15px; border: 4px solid var(--pink-dark); 
+            border-radius: 12px; overflow: hidden; margin-bottom: 15px; border: 4px solid var(--pink-dark); 
         }
         video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         #countdown {
@@ -133,17 +144,29 @@
             color: white; font-weight: 900; text-shadow: 4px 4px 0 var(--red-love); display: none;
         }
 
+        /* --- ปุ่มกดหลัก --- */
         .btn-primary {
             background: linear-gradient(to bottom, var(--pink-dark), var(--red-love)) !important;
             color: white !important; border: 2px solid var(--red-love) !important;
-            padding: 15px 20px; border-radius: 50px; font-size: 1.2rem; font-weight: 700;
+            padding: 12px 20px; border-radius: 8px; font-size: 1.1rem; font-weight: 700;
             cursor: pointer; width: 100%; display: inline-block; box-sizing: border-box; margin-top: 10px; 
-            box-shadow: 0 4px 0 #8B0000; font-family: 'Mali', cursive;
+            text-decoration: none; box-shadow: 0 4px 0 #8B0000, 0 10px 20px rgba(0,0,0,0.2) !important;
+            font-family: 'Mali', cursive; transition: 0.1s;
         }
         .btn-primary:active { transform: translateY(4px); box-shadow: 0 0 0 #8B0000 !important; }
+        .btn-primary:disabled { background: #ccc !important; border-color: #999 !important; box-shadow: none !important; transform: none !important; }
 
-        .emoji-options { display: flex; justify-content: space-around; font-size: 2rem; margin: 15px 0; cursor: pointer; }
-        .emoji-btn:hover { transform: scale(1.3); transition: 0.2s; }
+        .btn-secondary {
+            background: transparent; border: none; color: var(--red-love); margin-top: 15px; 
+            cursor: pointer; text-decoration: underline; font-weight: 700; font-family: 'Mali', cursive;
+        }
+
+        /* --- Result --- */
+        #qrcode-area {
+            background: #fff; padding: 15px; border-radius: 10px; display: inline-block; 
+            margin-bottom: 15px; border: 4px solid var(--pink-light);
+        }
+        #final-image-show img { width: 100%; border-radius: 8px; margin-bottom: 10px; border: 3px solid var(--pink-dark); }
     </style>
 </head>
 <body>
@@ -151,22 +174,22 @@
     <div class="container">
         <section id="step-welcome" class="active">
             <h1>CVC YOUTH</h1>
-            <p class="subtitle">💖 Valentine Photo Booth 2026 💖</p>
+            <p>💖 Valentine Photo Booth 2026 💖</p>
             
             <div class="content-box">
                 <p style="color:#333; margin-bottom:10px; font-weight:700;">1. เลือกลายพื้นหลัง</p>
                 <div class="bg-selector">
-                    <div class="bg-option selected" onclick="selectBg(this, '6.jpg')"><img src="6.jpg"></div>
-                    <div class="bg-option" onclick="selectBg(this, '7.jpg')"><img src="7.jpg"></div>
-                    <div class="bg-option" onclick="selectBg(this, '8.jpg')"><img src="8.jpg"></div>
-                    <div class="bg-option" onclick="selectBg(this, '9.jpg')"><img src="9.jpg"></div>
+                    <div class="bg-option selected" onclick="selectBg(this, '6.jpg')"><img src="6.jpg" alt="Frame 6"></div>
+                    <div class="bg-option" onclick="selectBg(this, '7.jpg')"><img src="7.jpg" alt="Frame 7"></div>
+                    <div class="bg-option" onclick="selectBg(this, '8.jpg')"><img src="8.jpg" alt="Frame 8"></div>
+                    <div class="bg-option" onclick="selectBg(this, '9.jpg')"><img src="9.jpg" alt="Frame 9"></div>
                 </div>
 
-                <p style="color:#333; margin-bottom:10px; font-weight:700;">2. เลือกรูปแบบ</p>
+                <p style="color:#333; margin-bottom:10px; font-weight:700;">2. เลือกรูปแบบช่องถ่ายรูป</p>
                 <div class="layout-selector">
                     <button class="layout-btn" onclick="startCamera('v2', 2)">แนวตั้ง 2 ช่อง</button>
                     <button class="layout-btn" onclick="startCamera('v4', 4)">แนวตั้ง 4 ช่อง</button>
-                    <button class="layout-btn" onclick="startCamera('grid', 4)" style="grid-column: span 2;">แบบ 4 ช่อง (Grid)</button>
+                    <button class="layout-btn" onclick="startCamera('grid', 4)" style="grid-column: span 2;">แนวนอน 4 ช่อง (Grid)</button>
                 </div>
             </div>
         </section>
@@ -177,7 +200,7 @@
                     <video id="video" autoplay playsinline></video>
                     <div id="countdown"></div>
                 </div>
-                <p id="status-text" style="font-weight: 700; color: var(--red-love);">เตรียมตัวนะ...</p>
+                <p id="status-text" style="font-weight: 700; color: var(--red-love);">ยิ้มหวานๆ เตรียมตัว...</p>
             </div>
         </section>
 
@@ -188,32 +211,37 @@
                     <div id="decor-tr" class="decor decor-tr"></div>
                     <div id="decor-bl" class="decor decor-bl"></div>
                     <div id="decor-br" class="decor decor-br"></div>
+                    
                     <div id="photo-grid" class="photo-grid"></div>
                 </div>
             </div>
             
             <div class="content-box">
-                <p style="margin:0; font-weight:700; color:#333;">เลือก Emoji ตกแต่ง</p>
-                <div class="emoji-options">
-                    <span class="emoji-btn" onclick="addEmoji('❤️')">❤️</span>
-                    <span class="emoji-btn" onclick="addEmoji('🌹')">🌹</span>
-                    <span class="emoji-btn" onclick="addEmoji('🎀')">🎀</span>
-                    <span class="emoji-btn" onclick="addEmoji('🧸')">🧸</span>
-                    <span class="emoji-btn" onclick="addEmoji('🍒')">🍒</span>
-                    <span class="emoji-btn" onclick="addEmoji('')">❌</span>
+                <p style="margin:0; font-weight:700; color:#333;">ตกแต่งด้วยสติกเกอร์ตามมุม</p>
+                <div class="decor-options">
+                    <span class="decor-btn" onclick="addEmoji('❤️')">❤️</span>
+                    <span class="decor-btn" onclick="addEmoji('🌹')">🌹</span>
+                    <span class="decor-btn" onclick="addEmoji('🎀')">🎀</span>
+                    <span class="decor-btn" onclick="addEmoji('🧸')">🧸</span>
+                    <span class="decor-btn" onclick="addEmoji('🍒')">🍒</span>
+                    <span class="decor-btn" onclick="addEmoji('')">❌</span>
                 </div>
-                <button class="btn-primary" id="save-btn" onclick="generateFinal()">บันทึกรูปภาพ 💌</button>
-                <button style="background:none; border:none; color:gray; cursor:pointer; margin-top:15px; text-decoration:underline;" onclick="location.reload()">เริ่มใหม่</button>
+                
+                <button class="btn-primary" id="save-btn" onclick="generateFinal()">รับรูปและ QR Code 💌</button>
+                <button class="btn-secondary" onclick="location.reload()">เริ่มใหม่</button>
             </div>
         </section>
 
         <section id="step-result" class="hidden">
             <div class="content-box">
-                <h2 style="color:var(--red-love);">เย้! ได้รูปแล้ว</h2>
-                <div id="qrcode" style="display:inline-block; padding:10px; background:white; border:2px solid var(--pink-dark); border-radius:10px; margin-bottom:15px;"></div>
+                <h2 style="color:var(--red-love); margin-top:0;">🎉 เสร็จเรียบร้อย!</h2>
+                <div id="qrcode-area">
+                    <div id="qrcode"></div>
+                    <p style="margin:5px 0 0; font-size:1rem; font-weight:700; color: var(--red-love);">สแกนเพื่อรับรูป</p>
+                </div>
                 <div id="final-image-show"></div>
-                <a id="download-link" class="btn-primary" style="text-decoration:none;">ดาวน์โหลดรูปภาพ</a>
-                <button style="background:none; border:none; color:gray; cursor:pointer; margin-top:15px; text-decoration:underline;" onclick="location.reload()">ถ่ายอีกครั้ง</button>
+                <a id="download-link" class="btn-primary">ดาวน์โหลดรูปลงเครื่อง</a>
+                <button class="btn-secondary" onclick="location.reload()">ถ่ายรูปใหม่</button>
             </div>
         </section>
     </div>
@@ -224,45 +252,68 @@
     <script>
         let photos = [];
         let stream = null;
-        let selectedBg = '6.jpg';
-        let currentLayout = { count: 4, class: 'grid-grid' };
+        let selectedBg = '6.jpg'; // ตั้งต้นที่ .jpg
+        let currentLayout = { type: 'v2', count: 2, class: 'grid-v2' };
 
-        function selectBg(el, bg) {
-            document.querySelectorAll('.bg-option').forEach(opt => opt.classList.remove('selected'));
-            el.classList.add('selected');
-            selectedBg = bg;
+        function selectBg(element, bgFile) {
+            document.querySelectorAll('.bg-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedBg = bgFile;
         }
 
         async function startCamera(type, count) {
-            currentLayout = { count, class: type === 'grid' ? 'grid-grid' : (type === 'v4' ? 'grid-v4' : 'grid-v2') };
+            let gridClass = type === 'grid' ? 'grid-2x2' : (type === 'v4' ? 'grid-v4' : 'grid-v2');
+            currentLayout = { type, count, class: gridClass };
+
+            document.getElementById('step-welcome').classList.remove('active');
             document.getElementById('step-welcome').classList.add('hidden');
             document.getElementById('step-camera').classList.remove('hidden');
+            document.getElementById('step-camera').classList.add('active');
 
             try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", aspectRatio: 4/3 } });
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", aspectRatio: 4/3 }, audio: false });
                 document.getElementById('video').srcObject = stream;
-                
-                const cd = document.getElementById('countdown');
-                photos = [];
-                for (let i = 1; i <= count; i++) {
-                    document.getElementById('status-text').innerText = `ยิ้มมม! รูปที่ ${i} / ${count}`;
-                    await new Promise(r => {
-                        let c = 3; cd.innerText = c; cd.style.display = 'block';
-                        const t = setInterval(() => {
-                            c--; if(c > 0) cd.innerText = c;
-                            else { clearInterval(t); cd.innerText = "📸"; r(); }
-                        }, 1000);
-                    });
-                    capture();
-                    await new Promise(r => setTimeout(r, 600));
-                    cd.style.display = 'none';
-                }
-                stream.getTracks().forEach(t => t.stop());
-                showEdit();
-            } catch (e) { alert("กล้องมีปัญหาจ้า!"); location.reload(); }
+                startCountdownSequence();
+            } catch (e) { 
+                alert("ไม่สามารถเปิดกล้องได้ กรุณาอนุญาตให้สิทธิ์การใช้กล้อง"); 
+                location.reload(); 
+            }
         }
 
-        function capture() {
+        async function startCountdownSequence() {
+            photos = [];
+            const cd = document.getElementById('countdown');
+            
+            for (let i = 1; i <= currentLayout.count; i++) {
+                document.getElementById('status-text').innerText = `รูปที่ ${i} / ${currentLayout.count}`;
+                
+                await new Promise(r => {
+                    let c = 3; 
+                    cd.innerText = c; 
+                    cd.style.display = 'block';
+                    
+                    const t = setInterval(() => { 
+                        c--; 
+                        if(c > 0) {
+                            cd.innerText = c; 
+                        } else { 
+                            clearInterval(t); 
+                            cd.innerText = "📸"; 
+                            r(); 
+                        } 
+                    }, 1000);
+                });
+
+                capturePhoto();
+                cd.style.display = 'none';
+                if (i < currentLayout.count) await new Promise(r => setTimeout(r, 800));
+            }
+
+            if(stream) stream.getTracks().forEach(t => t.stop());
+            setupPreview();
+        }
+
+        function capturePhoto() {
             const v = document.getElementById('video');
             const c = document.createElement('canvas');
             c.width = v.videoWidth; c.height = v.videoHeight;
@@ -272,31 +323,64 @@
             photos.push(c.toDataURL('image/png'));
         }
 
-        function showEdit() {
+        function setupPreview() {
+            document.getElementById('step-camera').classList.remove('active');
             document.getElementById('step-camera').classList.add('hidden');
             document.getElementById('step-edit').classList.remove('hidden');
-            document.getElementById('preview-container').style.backgroundImage = `url(${selectedBg})`;
+            document.getElementById('step-edit').classList.add('active');
+
+            const container = document.getElementById('preview-container');
+            container.style.backgroundImage = `url(${selectedBg})`;
+
             const grid = document.getElementById('photo-grid');
-            grid.className = 'photo-grid ' + currentLayout.class;
-            grid.innerHTML = photos.map(p => `<div class="photo-slot" style="background-image:url(${p})"></div>`).join('');
+            grid.className = 'photo-grid ' + currentLayout.class; 
+            grid.innerHTML = '';
+            
+            photos.forEach(src => {
+                const d = document.createElement('div');
+                d.className = 'photo-slot'; 
+                d.style.backgroundImage = `url(${src})`;
+                grid.appendChild(d);
+            });
+
             addEmoji('❤️');
         }
 
-        function addEmoji(e) {
-            ['tl','tr','bl','br'].forEach(pos => document.getElementById('decor-'+pos).innerText = e);
+        function addEmoji(emojiChar) {
+            document.getElementById('decor-tl').innerText = emojiChar;
+            document.getElementById('decor-tr').innerText = emojiChar;
+            document.getElementById('decor-bl').innerText = emojiChar;
+            document.getElementById('decor-br').innerText = emojiChar;
         }
 
         async function generateFinal() {
             const btn = document.getElementById('save-btn');
-            btn.innerText = "กำลังทำรูป..."; btn.disabled = true;
-            const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 3, useCORS: true });
-            const img = canvas.toDataURL('image/png');
-            document.getElementById('step-edit').classList.add('hidden');
-            document.getElementById('step-result').classList.remove('hidden');
-            document.getElementById('final-image-show').innerHTML = `<img src="${img}" style="width:100%; border-radius:10px;">`;
-            document.getElementById('download-link').href = img;
-            document.getElementById('download-link').download = `Valentine_CVC_${Date.now()}.png`;
-            new QRCode(document.getElementById("qrcode"), { text: window.location.href, width: 120, height: 120 });
+            const oldText = btn.innerText;
+            btn.innerText = "กำลังสร้างรูปภาพ... ⏳"; 
+            btn.disabled = true;
+
+            try {
+                const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 3, useCORS: true });
+                const imageData = canvas.toDataURL('image/png');
+
+                document.getElementById('step-edit').classList.remove('active');
+                document.getElementById('step-edit').classList.add('hidden');
+                document.getElementById('step-result').classList.remove('hidden');
+                document.getElementById('step-result').classList.add('active');
+
+                document.getElementById('final-image-show').innerHTML = `<img src="${imageData}">`;
+                
+                const link = document.getElementById('download-link');
+                link.href = imageData; 
+                link.download = `CVC_Valentine_${Date.now()}.png`;
+
+                new QRCode(document.getElementById("qrcode"), { text: window.location.href, width: 160, height: 160, colorDark : "#c9184a", colorLight : "#ffffff" });
+
+            } catch (e) {
+                alert("เกิดข้อผิดพลาดในการสร้างรูป: " + e.message);
+                btn.innerText = oldText; 
+                btn.disabled = false;
+            }
         }
     </script>
 </body>
