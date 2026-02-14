@@ -147,10 +147,10 @@
             <div class="content-box">
                 <p style="color:#333; margin-bottom:10px; font-weight:700;">1. เลือกลายพื้นหลัง</p>
                 <div class="bg-selector">
-                    <div class="bg-option selected" onclick="selectBg(this, '6.png')"><img src="6.png" alt="Frame 6"></div>
-                    <div class="bg-option" onclick="selectBg(this, '7.png')"><img src="7.png" alt="Frame 7"></div>
-                    <div class="bg-option" onclick="selectBg(this, '8.png')"><img src="8.png" alt="Frame 8"></div>
-                    <div class="bg-option" onclick="selectBg(this, '9.png')"><img src="9.png" alt="Frame 9"></div>
+                    <div class="bg-option selected" onclick="selectBg(this, '6.jpg')"><img src="6.jpg" alt="Frame 6"></div>
+                    <div class="bg-option" onclick="selectBg(this, '7.jpg')"><img src="7.jpg" alt="Frame 7"></div>
+                    <div class="bg-option" onclick="selectBg(this, '8.jpg')"><img src="8.jpg" alt="Frame 8"></div>
+                    <div class="bg-option" onclick="selectBg(this, '9.jpg')"><img src="9.jpg" alt="Frame 9"></div>
                 </div>
 
                 <p style="color:#333; margin-bottom:10px; font-weight:700;">2. เลือกรูปแบบช่องถ่ายรูป</p>
@@ -219,7 +219,7 @@
     <script>
         let photos = [];
         let stream = null;
-        let selectedBg = '6.png'; // เปลี่ยนค่าตั้งต้นเป็น .png
+        let selectedBg = '6.jpg'; // เปลี่ยนค่าตั้งต้นเป็น .jpg
         let currentLayout = { type: 'v2', count: 2, class: 'grid-v2' };
 
         function selectBg(element, bgFile) {
