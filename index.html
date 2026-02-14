@@ -30,26 +30,29 @@
             background-image: 
                 radial-gradient(circle at 50% 50%, transparent 0%, rgba(255, 255, 255, 0.4) 100%),
                 repeating-linear-gradient(45deg, var(--pink-light) 0, var(--pink-light) 10px, var(--pink-bg) 10px, var(--pink-bg) 20px);
-            padding-top: 20px; /* เพิ่มพื้นที่ด้านบนสุดของ Body */
+            /* เพิ่มระยะห่างด้านบนสุดของเว็บ */
+            padding-top: 20px; 
+            box-sizing: border-box;
         }
 
         .container { 
             width: 100%; 
             max-width: 500px; 
-            padding: 25px; 
+            padding: 20px; 
             box-sizing: border-box; 
             position: relative; 
             z-index: 1; 
             /* เพิ่มระยะห่างด้านบนเพื่อให้ไม่บังหัวข้อ */
-            margin-top: 30px; 
+            margin-top: 10px; 
         }
-        
+
         .hidden { display: none !important; }
         .active { display: block !important; }
 
         h1 {
             font-family: 'Satisfy', cursive; color: var(--red-love); font-size: 3.5rem; 
-            margin-bottom: 5px; margin-top: 10px; text-shadow: 2px 2px 0 var(--white); letter-spacing: 2px;
+            margin-bottom: 5px; margin-top: 0px; text-shadow: 2px 2px 0 var(--white); letter-spacing: 2px;
+            line-height: 1.1;
         }
         p { color: var(--red-love); font-weight: 700; margin-top: 0; font-size: 1.1rem; }
 
@@ -71,14 +74,32 @@
         }
         .layout-btn:hover { background: var(--pink-bg); transform: translateY(-3px); }
 
-        /* --- กรอบพรีวิวและรูปถ่าย --- */
+        /* --- กรอบพรีวิวและรูปถ่าย (ส่วนที่แก้ไขเรื่องรูปบีบ) --- */
         .frame-container {
-            padding: 30px; background-color: transparent; background-size: cover; background-position: center;
-            border-radius: 4px; margin-bottom: 15px; position: relative; min-height: 400px;
+            /* บังคับสัดส่วนให้เป็นแนวตั้ง 2:3 ตามรูปต้นฉบับ */
+            aspect-ratio: 2 / 3;
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto 15px auto;
+            
+            background-color: transparent; 
+            background-size: cover; 
+            background-position: center;
+            border-radius: 8px; 
+            position: relative; 
+            
+            /* ใช้ Flexbox เพื่อจัดให้รูปถ่ายอยู่กึ่งกลางกรอบเสมอ */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
         .photo-grid-wrapper {
-            position: relative; width: 85%; margin: 0 auto;
+            position: relative; 
+            width: 85%; /* ขนาดของกลุ่มรูปถ่ายเมื่อเทียบกับกรอบพื้นหลัง */
         }
 
         .photo-grid { 
@@ -195,7 +216,7 @@
                 </div>
             </div>
             
-            <div class="content-box" style="margin-top: 20px;">
+            <div class="content-box">
                 <p style="margin:0; font-weight:700; color:#333;">ตกแต่งด้วยสติกเกอร์ตามมุม</p>
                 <div class="decor-options">
                     <span class="decor-btn" onclick="addEmoji('❤️')">❤️</span>
@@ -231,7 +252,7 @@
     <script>
         let photos = [];
         let stream = null;
-        let selectedBg = '6.jpg';
+        let selectedBg = '6.jpg'; // ตั้งต้นที่ .jpg
         let currentLayout = { type: 'v2', count: 2, class: 'grid-v2' };
 
         function selectBg(element, bgFile) {
@@ -353,6 +374,7 @@
                 link.href = imageData; 
                 link.download = `CVC_Valentine_${Date.now()}.png`;
 
+                // สร้าง QR code (ลิงก์หน้าเว็บปัจจุบัน) เพื่อให้เพื่อนสแกนเข้ามาถ่ายรูปได้
                 new QRCode(document.getElementById("qrcode"), { text: window.location.href, width: 160, height: 160, colorDark : "#c9184a", colorLight : "#ffffff" });
 
             } catch (e) {
