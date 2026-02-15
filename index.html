@@ -51,14 +51,15 @@
             overflow: hidden; 
         }
 
-        /* 🔥 เทคนิคล็อกพิกัด 4 มุม รูปจะขยายเต็มกล่อง 100% เสมอ 🔥 */
+        /* 🔥 เทคนิคล็อกพิกัด 4 มุม - ปรับให้ขยายลงล่างมากขึ้น 🔥 */
         .photo-grid-wrapper {
             position: absolute; display: flex; align-items: center; justify-content: center; transition: all 0.3s;
         }
-        .pos-6 { top: 8%; bottom: 33%; left: 8%; right: 8%; }
-        .pos-7 { top: 18%; bottom: 6%; left: 5%; right: 5%; }  /* ขยายใหญ่สุดๆ เกือบชิดขอบ! */
-        .pos-8 { top: 18%; bottom: 18%; left: 8%; right: 8%; }
-        .pos-9 { top: 22%; bottom: 12%; left: 12%; right: 12%; }
+        /* ลดค่า bottom ลง เพื่อให้ขอบล่างขยายลงมา */
+        .pos-6 { top: 8%; bottom: 25%; left: 8%; right: 8%; } 
+        .pos-7 { top: 18%; bottom: 4%; left: 5%; right: 5%; }  /* เกือบชิดขอบล่างสุดๆ */
+        .pos-8 { top: 18%; bottom: 14%; left: 8%; right: 8%; } 
+        .pos-9 { top: 22%; bottom: 8%; left: 12%; right: 12%; }
 
         /* --- Grid รูปถ่าย --- */
         .photo-grid { display: grid; gap: 8px; position: relative; z-index: 2; width: 100%; height: 100%; }
@@ -267,7 +268,7 @@
 
                     const data = await res.json();
                     
-                    // อัปโหลดสำเร็จ! โชว์ QR ไปที่รูป
+                    // อัปโหลดสำเร็จ!
                     document.getElementById('final-image-show').innerHTML = `<img src="${data.url}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
                     document.getElementById('download-link').href = data.url;
                     document.getElementById('download-link').download = `CVC_Valentine_${Date.now()}.png`;
@@ -278,14 +279,16 @@
                     document.getElementById('qr-section').classList.remove('hidden');
 
                 } catch (err) {
-                    // ⚠️ ระบบสำรอง! ถ้า Server ขัดข้อง โชว์ QR ชวนเพื่อนแทน
+                    // อัปโหลดไม่สำเร็จ (Fallback)
                     document.getElementById('final-image-show').innerHTML = `<img src="${imageData}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
                     document.getElementById('download-link').href = imageData;
                     document.getElementById('download-link').download = `CVC_Valentine_${Date.now()}.png`;
                     
-                    document.getElementById('qr-note').innerHTML = "<b>สแกน QR Code เพื่อชวนเพื่อนมาเล่น!</b><br><span style='font-size:0.8rem; color:gray;'>(หากอัปโหลดขึ้นเซิร์ฟเวอร์สำเร็จ QR จะลิงก์ไปที่รูปครับ)</span>";
+                    // แจ้งเตือนที่ QR Code ว่าให้อัปโหลดใหม่
+                    document.getElementById('qr-note').innerHTML = "<span style='color:red;'>⚠️ ไม่สามารถอัปโหลดขึ้นเซิร์ฟเวอร์ได้</span><br><span style='font-size:0.8rem;'>(กรุณากด Redeploy ใน Vercel Dashboard)</span>";
                     document.getElementById("qrcode").innerHTML = "";
-                    new QRCode(document.getElementById("qrcode"), { text: window.location.href, width: 120, height: 120, colorDark : "#c9184a", colorLight : "#ffffff" });
+                    // สร้าง QR ไปที่หน้าเว็บเดิม เพื่อให้รู้ว่ามันไม่ได้ลิงก์ไปที่รูป
+                    new QRCode(document.getElementById("qrcode"), { text: window.location.href, width: 120, height: 120, colorDark : "#ccc", colorLight : "#ffffff" });
                     document.getElementById('qr-section').classList.remove('hidden');
                 }
 
