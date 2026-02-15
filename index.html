@@ -9,12 +9,8 @@
     
     <style>
         :root {
-            --pink-bg: #ffccd5;
-            --pink-light: #ffb3c1;
-            --pink-dark: #ff4d6d;
-            --red-love: #c9184a;
-            --cream: #fff5f7;
-            --white: #ffffff;
+            --pink-bg: #ffccd5; --pink-light: #ffb3c1; --pink-dark: #ff4d6d;
+            --red-love: #c9184a; --cream: #fff5f7; --white: #ffffff;
         }
 
         body {
@@ -51,30 +47,33 @@
             overflow: hidden; 
         }
 
-        /* 🔥 ล็อกพิกัด 4 มุม (คงเดิมไว้เพราะทำให้ Grid 4 ช่องสวยแล้ว) 🔥 */
         .photo-grid-wrapper {
             position: absolute; display: flex; align-items: center; justify-content: center; transition: all 0.3s;
         }
-        .pos-6 { top: 7%; bottom: 32%; left: 8%; right: 8%; } 
-        .pos-7 { top: 15%; bottom: 4%; left: 4%; right: 4%; }
-        .pos-8 { top: 17%; bottom: 13%; left: 7%; right: 7%; } 
+        
+        /* ขยับพิกัดกรอบให้สมส่วน */
+        .pos-6 { top: 8%; bottom: 34%; left: 8%; right: 8%; } 
+        .pos-7 { top: 15%; bottom: 6%; left: 6%; right: 6%; }  
+        .pos-8 { top: 17%; bottom: 13%; left: 8%; right: 8%; } 
         .pos-9 { top: 22%; bottom: 8%; left: 10%; right: 10%; }
 
-        /* --- Grid รูปถ่าย (ส่วนที่แก้ไขใหม่!) --- */
-        /* ลบ width: 100% ออกจากตัวแม่ เพื่อให้ลูกๆ กำหนดความกว้างเองได้ */
-        .photo-grid { display: grid; gap: 8px; position: relative; z-index: 2; height: 100%; }
+        /* --- 🔥 รูปแบบ Grid สไตล์ BeautyPlus 🔥 --- */
+        .photo-grid { display: grid; gap: 10px; position: relative; z-index: 2; justify-content: center; align-content: center; width: 100%; max-height: 100%; }
         
-        /* 🛠️ 2 ช่องแนวตั้ง: ปรับความกว้างให้สมส่วน (ประมาณ 70%) แล้วจัดกึ่งกลาง */
-        .grid-v2 { grid-template-rows: repeat(2, 1fr); grid-template-columns: 100%; width: 70%; margin: 0 auto; }
+        /* 2 ช่อง: เรียงซ้าย-ขวา รูปทรงแนวตั้ง (เหมือน BeautyPlus) */
+        .grid-v2 { grid-template-columns: 1fr 1fr; width: 95%; }
+        .grid-v2 .photo-slot { aspect-ratio: 3 / 4; }
 
-        /* 🛠️ 4 ช่องแนวตั้ง: ขยายให้กว้างขึ้น (ประมาณ 48%) แล้วจัดกึ่งกลาง */
-        .grid-v4 { grid-template-rows: repeat(4, 1fr); grid-template-columns: 100%; width: 48%; margin: 0 auto; }
+        /* 4 ช่องแนวตั้ง: ครอปให้กว้างขึ้น เพื่อให้ขยายได้เต็มกรอบโดยไม่ล้นความสูง */
+        .grid-v4 { grid-template-columns: 1fr; width: 70%; } 
+        .grid-v4 .photo-slot { aspect-ratio: 21 / 9; } /* ครอปแบบแนวนอนกว้างๆ */
 
-        /* ✅ 4 ช่องจัตุรัส (Grid): คงเดิมไว้ คือเต็มความกว้าง 100% */
-        .grid-grid { grid-template-rows: repeat(2, 1fr); grid-template-columns: repeat(2, 1fr); width: 100%; }
+        /* 4 ช่องจัตุรัส: เต็มตาเหมือนเดิม */
+        .grid-grid { grid-template-columns: 1fr 1fr; width: 95%; }
+        .grid-grid .photo-slot { aspect-ratio: 4 / 3; }
 
         .photo-slot { 
-            width: 100%; height: 100%; background-size: cover; background-position: center; 
+            width: 100%; height: auto; background-size: cover; background-position: center; 
             border: 4px solid white; box-shadow: 0 3px 6px rgba(0,0,0,0.15); border-radius: 6px;
         }
 
@@ -111,9 +110,9 @@
                 </div>
                 <p style="color:#333; margin-bottom:10px; font-weight:700;">2. เลือกรูปแบบ</p>
                 <div class="layout-selector">
-                    <button class="layout-btn" onclick="startCamera('v2', 2)">แนวตั้ง 2 ช่อง</button>
-                    <button class="layout-btn" onclick="startCamera('v4', 4)">แนวตั้ง 4 ช่อง</button>
-                    <button class="layout-btn" onclick="startCamera('grid', 4)" style="grid-column: span 2;">แบบ 4 ช่อง (Grid)</button>
+                    <button class="layout-btn" onclick="startCamera('v2', 2)">แบบ 2 ช่อง</button>
+                    <button class="layout-btn" onclick="startCamera('v4', 4)">แบบ 4 ช่องเรียง</button>
+                    <button class="layout-btn" onclick="startCamera('grid', 4)" style="grid-column: span 2;">แบบ 4 ช่อง (ตาราง)</button>
                 </div>
             </div>
         </section>
@@ -197,7 +196,8 @@
             switchStep('step-welcome', 'step-camera');
 
             try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", aspectRatio: 4/3 } });
+                // ปรับกล้องให้ถ่ายละเอียดขึ้น
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 720 } } });
                 document.getElementById('video').srcObject = stream;
                 
                 const cd = document.getElementById('countdown');
@@ -227,7 +227,7 @@
             const ctx = c.getContext('2d');
             ctx.translate(c.width, 0); ctx.scale(-1, 1);
             ctx.drawImage(v, 0, 0);
-            photos.push(c.toDataURL('image/png'));
+            photos.push(c.toDataURL('image/png', 0.9));
         }
 
         function showEdit() {
@@ -253,7 +253,7 @@
 
         async function generateFinal() {
             const btn = document.getElementById('save-btn');
-            btn.innerText = "กำลังประมวลผล... ⏳"; 
+            btn.innerText = "กำลังอัปโหลด... ⏳"; 
             btn.disabled = true;
 
             try {
@@ -274,7 +274,6 @@
 
                     const data = await res.json();
                     
-                    // อัปโหลดสำเร็จ! โชว์ QR ไปที่รูป
                     document.getElementById('final-image-show').innerHTML = `<img src="${data.url}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
                     document.getElementById('download-link').href = data.url;
                     document.getElementById('download-link').download = `CVC_Valentine_${Date.now()}.png`;
@@ -285,12 +284,11 @@
                     document.getElementById('qr-section').classList.remove('hidden');
 
                 } catch (err) {
-                    // ⚠️ Fallback: ถ้ายังอัปโหลดไม่ติด โชว์ QR ชวนเพื่อนแทน
                     document.getElementById('final-image-show').innerHTML = `<img src="${imageData}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
                     document.getElementById('download-link').href = imageData;
                     document.getElementById('download-link').download = `CVC_Valentine_${Date.now()}.png`;
                     
-                    document.getElementById('qr-note').innerHTML = "<b>สแกน QR Code เพื่อชวนเพื่อนมาเล่น!</b><br><span style='font-size:0.8rem; color:gray;'>(หากอัปโหลดขึ้นเซิร์ฟเวอร์สำเร็จ QR จะลิงก์ไปที่รูปครับ)</span>";
+                    document.getElementById('qr-note').innerHTML = "<b>สแกน QR Code เพื่อชวนเพื่อนมาเล่น!</b><br><span style='font-size:0.8rem; color:gray;'>(หากแก้ Vercel แล้ว QR จะลิงก์ไปที่รูปครับ)</span>";
                     document.getElementById("qrcode").innerHTML = "";
                     new QRCode(document.getElementById("qrcode"), { text: window.location.href, width: 120, height: 120, colorDark : "#c9184a", colorLight : "#ffffff" });
                     document.getElementById('qr-section').classList.remove('hidden');
