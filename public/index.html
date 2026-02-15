@@ -16,11 +16,9 @@
         body {
             font-family: 'Mali', cursive; margin: 0; text-align: center; display: flex; justify-content: center; min-height: 100vh;
             background-color: var(--pink-bg);
-            /* พื้นหลังเว็บเปลี่ยนเป็นสีเรียบๆ เพื่อไม่ให้ตีกับสีในกรอบรูป */
             background-image: repeating-linear-gradient(45deg, var(--pink-light) 0, var(--pink-light) 2px, var(--pink-bg) 2px, var(--pink-bg) 10px);
             padding-top: 20px; box-sizing: border-box; color: #333;
-            /* ป้องกันการเลื่อนหน้าจอเด้งไปมาเวลาลากสติ๊กเกอร์บนมือถือ */
-            touch-action: none; 
+            touch-action: none; /* กันหน้าจอเลื่อนเวลาลากสติกเกอร์ */
         }
 
         .container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; position: relative; z-index: 1; margin-top: 10px; }
@@ -33,9 +31,9 @@
 
         .content-box { background: var(--cream); border-radius: 20px; padding: 20px; border: 4px solid var(--pink-dark); box-shadow: 0 10px 30px rgba(201, 24, 74, 0.2); }
 
-        /* --- 🔥 Color Selector (เลือกสีพื้นหลัง) 🔥 --- */
+        /* --- เลือกสีพื้นหลัง --- */
         .color-selector { display: flex; gap: 15px; margin-bottom: 25px; justify-content: center; flex-wrap: wrap; }
-        .color-option { width: 50px; height: 50px; border-radius: 50%; border: 4px solid white; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .color-option { width: 45px; height: 45px; border-radius: 50%; border: 4px solid white; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         .color-option.selected { border-color: var(--red-love); transform: scale(1.15); box-shadow: 0 6px 12px rgba(201, 24, 74, 0.3); }
 
         .layout-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -44,33 +42,28 @@
 
         /* --- กรอบพรีวิว --- */
         .frame-container {
-            /* พื้นหลังจะถูกเปลี่ยนด้วย JS */
             aspect-ratio: 2 / 3; width: 100%; max-width: 420px; margin: 0 auto 20px auto;
-            background-color: white; border-radius: 10px; position: relative; border: 2px solid var(--pink-dark);
-            overflow: hidden; display: flex;
-            transition: background-color 0.3s ease; /* เพิ่ม transition ให้เปลี่ยนสีนุ่มๆ */
+            background-color: #ffccd5; border-radius: 10px; position: relative; border: 2px solid var(--pink-dark);
+            overflow: hidden; display: flex; transition: background-color 0.3s ease;
         }
 
-        /* พื้นที่วางรูป (อยู่ตรงกลางเสมอ) */
+        /* --- รูปแบบ Grid (แก้ให้ 4 ช่องอยู่ตรงกลางสวยๆ) --- */
         .photo-grid-wrapper {
             position: absolute; display: flex; align-items: center; justify-content: center;
-            top: 5% !important; bottom: 5% !important; left: 5% !important; right: 5% !important;
-            z-index: 5; /* อยู่ชั้นล่างของสติ๊กเกอร์ */
+            top: 0; bottom: 0; left: 0; right: 0; /* จัดให้อยู่กึ่งกลางเป๊ะ */
+            z-index: 5;
         }
 
-        /* --- 🔥 Grid รูปถ่าย (ปรับ 4 ช่องให้สมส่วน) 🔥 --- */
         .photo-grid { display: grid; position: relative; margin: auto; }
         
-        /* แบบ 2 ช่อง: ซ้าย-ขวา */
         .grid-v2 { grid-template-columns: 1fr 1fr; width: 90%; gap: 12px; }
         .grid-v2 .photo-slot { aspect-ratio: 3 / 4; }
 
-        /* แบบ 4 ช่องแนวตรง: บนลงล่าง */
         .grid-v4 { grid-template-columns: 1fr; width: 48%; gap: 8px; } 
         .grid-v4 .photo-slot { aspect-ratio: 4 / 3; }
 
-        /* ✅ แบบ 4 ช่องตาราง (กลับมาใช้สัดส่วน 4:3 แนวนอน ที่สมส่วน) */
-        .grid-grid { grid-template-columns: 1fr 1fr; width: 92%; gap: 10px; }
+        /* 4 ช่องตาราง กลับมาเป็นแบบเดิมที่คุณชอบ! */
+        .grid-grid { grid-template-columns: 1fr 1fr; width: 90%; gap: 10px; }
         .grid-grid .photo-slot { aspect-ratio: 4 / 3; }
 
         .photo-slot { 
@@ -78,24 +71,13 @@
             border: 4px solid white; box-shadow: 0 3px 6px rgba(0,0,0,0.15); border-radius: 6px;
         }
 
-        /* --- 🔥 Stickers (สติ๊กเกอร์ลากได้) 🔥 --- */
-        .sticker-palette-container {
-            background: white; padding: 10px; border-radius: 15px; border: 2px solid var(--pink-light); margin-bottom: 15px;
-        }
-        .sticker-palette {
-            display: flex; gap: 15px; overflow-x: auto; padding: 5px; scrollbar-width: none; /* ซ่อน scrollbar */
-        }
+        /* --- สติกเกอร์ --- */
+        .sticker-palette-container { background: white; padding: 10px; border-radius: 15px; border: 2px solid var(--pink-light); margin-bottom: 15px; }
+        .sticker-palette { display: flex; gap: 15px; overflow-x: auto; padding: 5px; scrollbar-width: none; }
         .sticker-palette::-webkit-scrollbar { display: none; }
-        .sticker-option {
-            font-size: 3.5rem; cursor: pointer; transition: 0.2s; user-select: none;
-            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1));
-        }
+        .sticker-option { font-size: 3rem; cursor: pointer; transition: 0.2s; user-select: none; filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1)); }
         .sticker-option:hover { transform: scale(1.2) rotate(5deg); }
-        .draggable-sticker {
-            position: absolute; font-size: 5rem; z-index: 20; cursor: move; user-select: none;
-            filter: drop-shadow(3px 3px 0px rgba(0,0,0,0.2));
-            touch-action: none; /* สำคัญมากสำหรับมือถือ */
-        }
+        .draggable-sticker { position: absolute; font-size: 4rem; z-index: 20; cursor: move; user-select: none; filter: drop-shadow(3px 3px 0px rgba(0,0,0,0.2)); touch-action: none; }
 
         .camera-wrapper { position: relative; width: 100%; padding-bottom: 133.33%; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 15px; border: 4px solid var(--pink-dark); }
         video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
@@ -145,14 +127,14 @@
 
         <section id="step-edit" class="hidden">
             <div class="frame-container" id="preview-container">
-                <div id="sticker-layer" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:20;"></div>
+                <div id="sticker-layer" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:20; pointer-events:none;"></div>
                 <div id="photo-grid-wrapper" class="photo-grid-wrapper">
                     <div id="photo-grid" class="photo-grid"></div>
                 </div>
             </div>
             
             <div class="content-box">
-                <p class="section-title" style="text-align:center;">จิ้มเพื่อเพิ่มสติ๊กเกอร์ (ลากวางได้!)</p>
+                <p class="section-title" style="text-align:center; margin-top:0;">จิ้มสติกเกอร์ แล้วลากแต่งรูปได้เลย!</p>
                 <div class="sticker-palette-container">
                     <div class="sticker-palette">
                         <span class="sticker-option" onclick="addSticker('💖')">💖</span>
@@ -164,10 +146,10 @@
                         <span class="sticker-option" onclick="addSticker('🥰')">🥰</span>
                         <span class="sticker-option" onclick="addSticker('🎉')">🎉</span>
                         <span class="sticker-option" onclick="addSticker('🎂')">🎂</span>
-                         <span class="sticker-option" onclick="addSticker('🍒')">🍒</span>
+                        <span class="sticker-option" onclick="addSticker('🍒')">🍒</span>
                     </div>
                 </div>
-                <button style="background:#eee; border:none; color:#666; padding: 8px 15px; border-radius:20px; cursor:pointer; margin-bottom: 15px; font-family: 'Mali';" onclick="clearStickers()">❌ ลบสติ๊กเกอร์ทั้งหมด</button>
+                <button style="background:#eee; border:none; color:#666; padding: 8px 15px; border-radius:20px; cursor:pointer; margin-bottom: 15px; font-family: 'Mali';" onclick="clearStickers()">❌ ลบสติกเกอร์ทั้งหมด</button>
 
                 <button class="btn-primary" id="save-btn" onclick="generateFinal()">บันทึกรูปภาพ 💌</button>
                 <button style="background:none; border:none; color:gray; cursor:pointer; margin-top:15px; text-decoration:underline;" onclick="location.reload()">เริ่มใหม่</button>
@@ -194,10 +176,9 @@
     <script>
         let photos = [];
         let stream = null;
-        // เปลี่ยนจาก selectedBg เป็น selectedColor
         let selectedColor = '#ffccd5';
         let currentLayout = { count: 4, class: 'grid-grid' };
-        // ตัวแปรสำหรับระบบลากวาง
+        
         let activeSticker = null;
         let initialX, initialY, currentX, currentY, xOffset = 0, yOffset = 0;
 
@@ -208,7 +189,6 @@
             if(showEl) { showEl.classList.remove('hidden'); showEl.classList.add('active'); }
         }
 
-        // 🔥 ฟังก์ชันเลือกสี 🔥
         function selectColor(el, color) {
             document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
             el.classList.add('selected');
@@ -240,7 +220,7 @@
                 }
                 stream.getTracks().forEach(t => t.stop());
                 showEdit();
-            } catch (e) { alert("เกิดข้อผิดพลาดในการเปิดกล้อง ลองใหม่อีกครั้งครับ"); location.reload(); }
+            } catch (e) { alert("กล้องมีปัญหาจ้า!"); location.reload(); }
         }
 
         function capture() {
@@ -255,38 +235,31 @@
 
         function showEdit() {
             switchStep('step-camera', 'step-edit');
-            // 🔥 ตั้งค่าสีพื้นหลังตามที่เลือก 🔥
             document.getElementById('preview-container').style.backgroundColor = selectedColor;
-            document.getElementById('preview-container').style.backgroundImage = 'none'; // ลบรูปภาพออก
             
             const grid = document.getElementById('photo-grid');
             grid.className = 'photo-grid ' + currentLayout.class;
             grid.innerHTML = photos.map(p => `<div class="photo-slot" style="background-image:url(${p})"></div>`).join('');
-            // ไม่มีการเรียก addEmoji อัตโนมัติแล้ว
         }
 
-        // 🔥 ฟังก์ชันเพิ่มสติ๊กเกอร์ (พร้อมระบบลากวาง) 🔥
+        /* --- ระบบลากสติกเกอร์ --- */
         function addSticker(emoji) {
             const sticker = document.createElement('div');
             sticker.className = 'draggable-sticker';
             sticker.innerText = emoji;
-            // สุ่มตำแหน่งเริ่มต้นกับมุมเอียงนิดหน่อยให้ดูธรรมชาติ
-            sticker.style.left = (Math.random() * 60 + 20) + '%';
-            sticker.style.top = (Math.random() * 60 + 20) + '%';
+            sticker.style.pointerEvents = 'auto'; 
+            sticker.style.left = '50%';
+            sticker.style.top = '15%';
             sticker.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 30 - 15}deg)`;
 
-            // เพิ่ม Event Listeners สำหรับการลาก (ทั้งเมาส์และนิ้ว)
             sticker.addEventListener('mousedown', dragStart, false);
             sticker.addEventListener('touchstart', dragStart, {passive: false});
             
             document.getElementById('sticker-layer').appendChild(sticker);
         }
 
-        function clearStickers() {
-            document.getElementById('sticker-layer').innerHTML = '';
-        }
+        function clearStickers() { document.getElementById('sticker-layer').innerHTML = ''; }
 
-        // --- ระบบ Drag & Drop ---
         const container = document.getElementById('preview-container');
         container.addEventListener('mousemove', drag, false);
         container.addEventListener('touchmove', drag, {passive: false});
@@ -294,15 +267,15 @@
         container.addEventListener('touchend', dragEnd, false);
 
         function dragStart(e) {
-            if (e.type === "touchstart") {
-                initialX = e.touches[0].clientX - xOffset;
-                initialY = e.touches[0].clientY - yOffset;
-            } else {
-                initialX = e.clientX - xOffset;
-                initialY = e.clientY - yOffset;
-            }
             if (e.target.classList.contains('draggable-sticker')) {
                 activeSticker = e.target;
+                if (e.type === "touchstart") {
+                    initialX = e.touches[0].clientX - xOffset;
+                    initialY = e.touches[0].clientY - yOffset;
+                } else {
+                    initialX = e.clientX - xOffset;
+                    initialY = e.clientY - yOffset;
+                }
             }
         }
 
@@ -316,28 +289,21 @@
                     currentX = e.clientX - initialX;
                     currentY = e.clientY - initialY;
                 }
-                xOffset = currentX;
-                yOffset = currentY;
-                // ใช้ translate เพื่อย้ายตำแหน่ง (รักษา rotation เดิมไว้)
+                xOffset = currentX; yOffset = currentY;
                 const currentRotation = activeSticker.style.transform.match(/rotate\(([^)]+)\)/);
                 const rotation = currentRotation ? currentRotation[0] : 'rotate(0deg)';
                 activeSticker.style.transform = `translate(calc(-50% + ${currentX}px), calc(-50% + ${currentY}px)) ${rotation}`;
             }
         }
 
-        function dragEnd(e) {
-            initialX = currentX;
-            initialY = currentY;
-            activeSticker = null;
-        }
-        // -----------------------
+        function dragEnd(e) { initialX = currentX; initialY = currentY; activeSticker = null; }
 
-
+        /* --- ระบบบันทึกรูปและดักจับ Error --- */
         async function generateFinal() {
             const btn = document.getElementById('save-btn');
             btn.innerText = "กำลังอัปโหลด... ⏳"; 
             btn.disabled = true;
-            activeSticker = null; // หยุดการลากก่อนบันทึก
+            activeSticker = null;
 
             try {
                 const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 1.5, useCORS: true });
@@ -355,7 +321,7 @@
                     
                     if (!res.ok) {
                         const errText = await res.text();
-                        throw new Error(`HTTP ${res.status}: ${errText}`);
+                        throw new Error(`โค้ด Error: ${res.status}\nข้อความ: ${errText}`);
                     }
 
                     const data = await res.json();
@@ -370,7 +336,9 @@
                     document.getElementById('qr-section').classList.remove('hidden');
 
                 } catch (err) {
-                    console.error("API Error:", err);
+                    // 🔥 เด้ง Alert บอกปัญหาทันที จะได้รู้ว่า Vercel ติดอะไร 🔥
+                    alert("⚠️ การอัปโหลดล้มเหลว!\n\nสาเหตุ:\n" + err.message + "\n\n(รบกวนแคปจอนี้ให้ผมดูหน่อยนะครับ!)");
+
                     document.getElementById('final-image-show').innerHTML = `<img src="${imageData}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
                     document.getElementById('download-link').href = imageData;
                     document.getElementById('download-link').download = `CVC_Valentine_${Date.now()}.jpg`;
@@ -382,7 +350,7 @@
                 }
 
             } catch (e) {
-                alert("เกิดข้อผิดพลาดในการเซฟรูปภาพครับ: " + e.message);
+                alert("เกิดข้อผิดพลาดในการสร้างรูปครับ");
                 switchStep('step-result', 'step-edit');
                 btn.innerText = "บันทึกรูปภาพ 💌"; 
                 btn.disabled = false;
