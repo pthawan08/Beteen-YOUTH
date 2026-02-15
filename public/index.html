@@ -40,37 +40,54 @@
         .layout-btn { background: #fff; border: 2px solid var(--pink-light); border-radius: 10px; padding: 15px 10px; cursor: pointer; font-weight: 700; color: var(--red-love); font-family: 'Mali', cursive; transition: 0.2s; }
         .layout-btn:hover { background: var(--pink-bg); transform: translateY(-3px); }
 
-        /* --- 🔥 กรอบพรีวิว (ปรับ Layout ใหม่ทั้งหมด) 🔥 --- */
+        /* --- 🔥 กรอบพรีวิว (แก้ไขการจัดกึ่งกลางใหม่) 🔥 --- */
         .frame-container {
-            aspect-ratio: 2 / 3; width: 100%; max-width: 420px; margin: 0 auto 20px auto;
+            aspect-ratio: 2 / 3; /* อัตราส่วนกรอบนอกรวม */
+            width: 100%; max-width: 420px; margin: 0 auto 20px auto;
             background-color: #ffccd5; border-radius: 10px; position: relative; border: 2px solid var(--pink-dark);
-            /* ใช้ Padding ตีกรอบด้านใน (พื้นที่ปลอดภัย) ให้รูปขยายเต็มพื้นที่ตรงกลาง */
-            padding: 40px 20px 80px 20px; box-sizing: border-box; 
+            /* ใช้ Flexbox สั่งให้ของข้างในอยู่ตรงกลางเป๊ะๆ */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px; /* เว้นขอบเล็กน้อยเพื่อความสวยงาม */
+            box-sizing: border-box;
             transition: background-color 0.3s ease;
             overflow: hidden;
         }
 
+        /* Wrapper เป็นตัวกำหนดขอบเขตกลุ่มรูปภาพ */
         .photo-grid-wrapper {
-            width: 100%; height: 100%; position: relative; z-index: 5;
+            /* กำหนดสัดส่วนของกลุ่มรูปภาพ (เช่น 3:4 ให้ดูเป็นทรงตั้งสวยๆ) */
+            aspect-ratio: 3 / 4;
+            /* ให้ขยายเต็มความสูงที่ container อนุญาต โดยรักษาอัตราส่วน */
+            width: auto;
+            height: 100%;
+            max-width: 100%; /* ห้ามกว้างเกิน container */
+            position: relative; z-index: 5;
+            display: flex; /* เพื่อให้ grid ข้างในขยายเต็ม */
         }
 
-        /* --- 🔥 รูปแบบ Grid --- */
+        /* --- 🔥 รูปแบบ Grid (ปรับให้เต็มพื้นที่ wrapper) --- */
         .photo-grid { 
             display: grid; width: 100%; height: 100%;
-            justify-content: center; align-content: center; 
         }
         
-        /* 1. แบบ 2 ช่อง: เรียงซ้ายขวา รูปแนวตั้ง 3:4 */
+        /* 1. แบบ 2 ช่อง: ซ้ายขวา */
         .grid-v2 { grid-template-columns: 1fr 1fr; gap: 15px; }
         .grid-v2 .photo-slot { aspect-ratio: 3 / 4; width: 100%; height: auto; }
 
-        /* 2. แบบ 4 ช่องเรียง: บนลงล่าง รูปแนวนอน 4:3 */
+        /* 2. แบบ 4 ช่องเรียง: บนลงล่าง */
         .grid-v4 { grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); gap: 10px; } 
-        .grid-v4 .photo-slot { width: 100%; height: 100%; } /* ยืดเต็มความสูงอัตโนมัติ */
+        .grid-v4 .photo-slot { width: 100%; height: 100%; }
 
-        /* 3. แบบ 4 ช่องตาราง: 2x2 รูปแนวตั้ง 3:4 (เหมือน BeautyPlus เป๊ะ!) */
-        .grid-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
-        .grid-grid .photo-slot { aspect-ratio: 3 / 4; width: 100%; height: auto; }
+        /* ✅ 3. แบบ 4 ช่องตาราง: 2x2 (แก้ใหม่ให้เต็มพื้นที่) */
+        .grid-grid { 
+            grid-template-columns: 1fr 1fr; 
+            grid-template-rows: repeat(2, 1fr); /* บังคับ 2 แถวเต็มความสูง */
+            gap: 10px; 
+        }
+        /* ให้ยืดตามแม่ ไม่ต้องกำหนด aspect-ratio เอง */
+        .grid-grid .photo-slot { width: 100%; height: 100%; }
 
         .photo-slot { 
             background-size: cover; background-position: center; 
@@ -255,7 +272,7 @@
             sticker.innerText = emoji;
             sticker.style.pointerEvents = 'auto'; 
             sticker.style.left = '50%';
-            sticker.style.top = '20%';
+            sticker.style.top = '50%';
             sticker.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 30 - 15}deg)`;
 
             sticker.addEventListener('mousedown', dragStart, false);
