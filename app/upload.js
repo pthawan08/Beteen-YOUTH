@@ -12,8 +12,9 @@ module.exports = async function handler(req, res) {
         const filename = `cvc-valentine-${Date.now()}.jpg`;
 
         const token = process.env.BLOB_READ_WRITE_TOKEN;
-        if (!token) throw new Error("Vercel Blob Token is missing");
+        if (!token) throw new Error("ไม่พบ Token ของ Vercel Blob ในระบบ");
 
+        // ยิงข้อมูลเข้า Vercel Storage แบบตรงๆ
         const response = await fetch(`https://blob.vercel-storage.com/${filename}`, {
             method: 'PUT',
             headers: {
