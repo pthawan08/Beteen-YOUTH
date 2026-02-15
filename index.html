@@ -26,8 +26,6 @@
         }
 
         .container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; position: relative; z-index: 1; margin-top: 10px; }
-        
-        /* 🔥 โค้ดซ่อน/แสดงหน้าจอ (แก้บั๊กค้างแล้ว) 🔥 */
         .hidden { display: none !important; }
         .active { display: block !important; }
 
@@ -50,24 +48,23 @@
             aspect-ratio: 2 / 3; width: 100%; max-width: 420px; margin: 0 auto 20px auto;
             background-color: white; background-size: cover; background-position: center;
             border-radius: 10px; position: relative; border: 2px solid var(--pink-dark);
-            display: flex; align-items: center; justify-content: center; overflow: hidden; 
+            overflow: hidden; 
         }
 
+        /* 🔥 เทคนิคล็อกพิกัด 4 มุม รูปจะขยายเต็มกล่อง 100% เสมอ 🔥 */
         .photo-grid-wrapper {
-            position: relative; width: 100%; display: flex; align-items: center; justify-content: center; transition: all 0.3s;
+            position: absolute; display: flex; align-items: center; justify-content: center; transition: all 0.3s;
         }
-        
-        .pos-6 { padding-bottom: 25%; } 
-        .pos-7 { padding-top: 8%; }    
-        .pos-8 { padding-bottom: 8%; } 
-        .pos-9 { padding-top: 15%; }   
+        .pos-6 { top: 8%; bottom: 33%; left: 8%; right: 8%; }
+        .pos-7 { top: 18%; bottom: 6%; left: 5%; right: 5%; }  /* ขยายใหญ่สุดๆ เกือบชิดขอบ! */
+        .pos-8 { top: 18%; bottom: 18%; left: 8%; right: 8%; }
+        .pos-9 { top: 22%; bottom: 12%; left: 12%; right: 12%; }
 
         /* --- Grid รูปถ่าย --- */
-        .photo-grid { display: grid; gap: 8px; position: relative; z-index: 2; }
-        .grid-v2 { grid-template-rows: repeat(2, 1fr); grid-template-columns: 100%; aspect-ratio: 4 / 6.2; width: 60%; }
-        .grid-v4 { grid-template-rows: repeat(4, 1fr); grid-template-columns: 100%; aspect-ratio: 4 / 12.5; width: 45%; } 
-        /* ปรับขนาดตาราง 4 ช่องให้สวยงามพอดี */
-        .grid-grid { grid-template-rows: repeat(2, 1fr); grid-template-columns: repeat(2, 1fr); aspect-ratio: 1 / 1.02; width: 80%; }
+        .photo-grid { display: grid; gap: 8px; position: relative; z-index: 2; width: 100%; height: 100%; }
+        .grid-v2 { grid-template-rows: repeat(2, 1fr); grid-template-columns: 100%; }
+        .grid-v4 { grid-template-rows: repeat(4, 1fr); grid-template-columns: 100%; } 
+        .grid-grid { grid-template-rows: repeat(2, 1fr); grid-template-columns: repeat(2, 1fr); }
 
         .photo-slot { 
             width: 100%; height: 100%; background-size: cover; background-position: center; 
@@ -154,7 +151,7 @@
                 <h2 style="color:var(--red-love); margin-bottom: 5px;">เย้! ได้รูปแล้ว</h2>
                 
                 <div id="qr-section" class="hidden">
-                    <p style="margin-top:0; font-size:0.9rem; color:var(--pink-dark);">สแกน QR Code นี้เพื่อโหลดรูปลงมือถือ</p>
+                    <p id="qr-note" style="margin-top:0; font-size:0.9rem; color:var(--pink-dark);">สแกน QR Code นี้เพื่อโหลดรูปลงมือถือ</p>
                     <div id="qrcode" style="display:inline-block; padding:10px; background:white; border:2px solid var(--pink-dark); border-radius:10px; margin-bottom:15px;"></div>
                 </div>
                 
@@ -175,7 +172,6 @@
         let selectedBg = '6.jpg';
         let currentLayout = { count: 4, class: 'grid-grid' };
 
-        // 🔥 ฟังก์ชันแก้หน้าค้าง สลับหน้าได้ชัวร์ 100% 🔥
         function switchStep(hideId, showId) {
             const hideEl = document.getElementById(hideId);
             const showEl = document.getElementById(showId);
@@ -191,8 +187,6 @@
 
         async function startCamera(type, count) {
             currentLayout = { count, class: type === 'grid' ? 'grid-grid' : (type === 'v4' ? 'grid-v4' : 'grid-v2') };
-            
-            // เปลี่ยนไปหน้ากล้อง
             switchStep('step-welcome', 'step-camera');
 
             try {
@@ -230,9 +224,7 @@
         }
 
         function showEdit() {
-            // เปลี่ยนไปหน้าตกแต่ง
             switchStep('step-camera', 'step-edit');
-            
             document.getElementById('preview-container').style.backgroundImage = `url(${selectedBg})`;
             
             const wrapper = document.getElementById('photo-grid-wrapper');
@@ -261,12 +253,10 @@
                 const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 3, useCORS: true });
                 const imageData = canvas.toDataURL('image/png');
 
-                // เปลี่ยนไปหน้ารับรูป
                 switchStep('step-edit', 'step-result');
                 document.getElementById('final-image-show').innerHTML = `<p style="color:gray;">กำลังเตรียมรูปภาพ...</p>`;
 
                 try {
-                    // ลองส่งรูปขึ้น Server Vercel
                     const res = await fetch('/api/upload', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -277,21 +267,26 @@
 
                     const data = await res.json();
                     
-                    // ทำงานสำเร็จ (มี QR Code)
+                    // อัปโหลดสำเร็จ! โชว์ QR ไปที่รูป
                     document.getElementById('final-image-show').innerHTML = `<img src="${data.url}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
                     document.getElementById('download-link').href = data.url;
                     document.getElementById('download-link').download = `CVC_Valentine_${Date.now()}.png`;
 
+                    document.getElementById('qr-note').innerText = "สแกน QR Code นี้เพื่อโหลดรูปลงมือถือ";
                     document.getElementById("qrcode").innerHTML = "";
                     new QRCode(document.getElementById("qrcode"), { text: data.url, width: 140, height: 140, colorDark : "#c9184a", colorLight : "#ffffff" });
                     document.getElementById('qr-section').classList.remove('hidden');
 
                 } catch (err) {
-                    // ⚠️ ระบบสำรอง: ถ้า Server พัง ให้โชว์รูปให้โหลดตรงๆ (รอดชัวร์ 100%)
+                    // ⚠️ ระบบสำรอง! ถ้า Server ขัดข้อง โชว์ QR ชวนเพื่อนแทน
                     document.getElementById('final-image-show').innerHTML = `<img src="${imageData}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
                     document.getElementById('download-link').href = imageData;
                     document.getElementById('download-link').download = `CVC_Valentine_${Date.now()}.png`;
-                    document.getElementById('qr-section').classList.add('hidden'); // ซ่อน QR Code ที่พัง
+                    
+                    document.getElementById('qr-note').innerHTML = "<b>สแกน QR Code เพื่อชวนเพื่อนมาเล่น!</b><br><span style='font-size:0.8rem; color:gray;'>(หากอัปโหลดขึ้นเซิร์ฟเวอร์สำเร็จ QR จะลิงก์ไปที่รูปครับ)</span>";
+                    document.getElementById("qrcode").innerHTML = "";
+                    new QRCode(document.getElementById("qrcode"), { text: window.location.href, width: 120, height: 120, colorDark : "#c9184a", colorLight : "#ffffff" });
+                    document.getElementById('qr-section').classList.remove('hidden');
                 }
 
             } catch (e) {
