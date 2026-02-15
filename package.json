@@ -1,0 +1,6 @@
+{
+  "name": "beteen-youth",
+  "dependencies": {
+    "@vercel/blob": "latest"
+  }
+}
