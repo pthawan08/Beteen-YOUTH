@@ -19,133 +19,78 @@
 
         body {
             font-family: 'Mali', cursive;
-            margin: 0;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
+            margin: 0; text-align: center; display: flex; justify-content: center; min-height: 100vh;
             background-color: var(--pink-bg);
             background-image: 
                 radial-gradient(circle at 50% 50%, transparent 0%, rgba(255, 255, 255, 0.4) 100%),
                 repeating-linear-gradient(45deg, var(--pink-light) 0, var(--pink-light) 10px, var(--pink-bg) 10px, var(--pink-bg) 20px);
-            padding-top: 30px; 
-            box-sizing: border-box;
+            padding-top: 20px; box-sizing: border-box; color: #333;
         }
 
-        .container { 
-            width: 100%; 
-            max-width: 500px; 
-            padding: 20px; 
-            box-sizing: border-box; 
-            position: relative; 
-            z-index: 1; 
-            margin-top: 10px; 
-        }
-
+        .container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; position: relative; z-index: 1; margin-top: 10px; }
         .hidden { display: none !important; }
         .active { display: block !important; }
 
-        h1 {
-            font-family: 'Satisfy', cursive; color: var(--red-love); font-size: 3.5rem; 
-            margin: 0; text-shadow: 2px 2px 0 var(--white); letter-spacing: 2px;
-            line-height: 1.1;
-        }
+        h1 { font-family: 'Satisfy', cursive; color: var(--red-love); font-size: 3.5rem; margin: 0; text-shadow: 2px 2px 0 var(--white); line-height: 1.1; }
         .subtitle { color: var(--red-love); font-weight: 700; margin-bottom: 20px; font-size: 1.1rem; }
 
-        .content-box {
-            background: var(--cream); border-radius: 20px; padding: 20px;
-            border: 4px solid var(--pink-dark); box-shadow: 0 10px 30px rgba(201, 24, 74, 0.2);
-        }
+        .content-box { background: var(--cream); border-radius: 20px; padding: 20px; border: 4px solid var(--pink-dark); box-shadow: 0 10px 30px rgba(201, 24, 74, 0.2); }
 
-        /* --- การเลือกพื้นหลัง --- */
         .bg-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
         .bg-option { border: 4px solid transparent; border-radius: 12px; cursor: pointer; transition: 0.2s; overflow: hidden; background: white; }
         .bg-option.selected { border-color: var(--red-love); transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .bg-option img { width: 100%; display: block; }
 
         .layout-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .layout-btn {
-            background: #fff; border: 2px solid var(--pink-light); border-radius: 10px; padding: 15px 10px; 
-            cursor: pointer; font-weight: 700; color: var(--red-love); font-family: 'Mali', cursive; transition: 0.2s;
-        }
+        .layout-btn { background: #fff; border: 2px solid var(--pink-light); border-radius: 10px; padding: 15px 10px; cursor: pointer; font-weight: 700; color: var(--red-love); font-family: 'Mali', cursive; transition: 0.2s; }
         .layout-btn:hover { background: var(--pink-bg); transform: translateY(-3px); }
 
-        /* --- กรอบพรีวิว (ปรับลด Padding เพื่อเพิ่มพื้นที่รูป) --- */
+        /* --- กรอบพรีวิว --- */
         .frame-container {
-            aspect-ratio: 2 / 3;
-            width: 100%;
-            max-width: 420px;
-            margin: 0 auto 20px auto;
-            background-color: white; 
-            background-size: cover; 
-            background-position: center;
-            border-radius: 10px; 
-            position: relative; 
-            display: flex;
-            align-items: flex-end; 
-            justify-content: center;
-            /* 🔥 แก้ไข: ลด Padding บน-ล่างลง 🔥 */
-            padding: 25px 20px; 
-            box-sizing: border-box;
-            border: 2px solid var(--pink-dark);
+            aspect-ratio: 2 / 3; width: 100%; max-width: 420px; margin: 0 auto 20px auto;
+            background-color: white; background-size: cover; background-position: center;
+            border-radius: 10px; position: relative; border: 2px solid var(--pink-dark);
+            overflow: hidden; 
         }
 
         .photo-grid-wrapper {
-            position: relative; 
-            width: 100%;
-            /* 🔥 แก้ไข: ลด Margin ล่างลง 🔥 */
-            margin-bottom: 10px; 
-        }
-
-        .photo-grid { 
-            display: grid; gap: 8px; position: relative; z-index: 2; margin: 0 auto;
+            position: absolute; display: flex; align-items: center; justify-content: center; transition: all 0.3s;
         }
         
-        /* 🔥 แก้ไข: ขยายความกว้างของรูป 4 ช่องให้ใหญ่ขึ้น 🔥 */
-        .grid-v2 { grid-template-columns: 1fr; width: 60%; }
-        /* ขยายจาก 35% เป็น 52% */
-        .grid-v4 { grid-template-columns: 1fr; width: 52%; } 
-        /* ขยายจาก 85% เป็น 92% */
-        .grid-grid { grid-template-columns: 1fr 1fr; width: 92%; }
+        /* ขยับ Safe Area ให้สมส่วนขึ้น */
+        .safe-area-6 { top: 10%; bottom: 35%; left: 10%; right: 10%; }
+        .safe-area-7 { top: 18%; bottom: 12%; left: 12%; right: 12%; }
+        .safe-area-8 { top: 18%; bottom: 20%; left: 12%; right: 12%; }
+        .safe-area-9 { top: 25%; bottom: 12%; left: 15%; right: 15%; }
+
+        /* --- Grid & รูปถ่าย (ปรับให้สวยเหมือน BeautyPlus) --- */
+        .photo-grid { 
+            display: grid; gap: 8px; position: relative; z-index: 2;
+            width: 100%; max-height: 100%; 
+        }
+        .grid-v2 { grid-template-rows: repeat(2, 1fr); grid-template-columns: 100%; aspect-ratio: 4 / 6.2; width: 75%; }
+        .grid-v4 { grid-template-rows: repeat(4, 1fr); grid-template-columns: 100%; aspect-ratio: 4 / 12.5; width: 45%; } 
+        .grid-grid { grid-template-rows: repeat(2, 1fr); grid-template-columns: repeat(2, 1fr); aspect-ratio: 1 / 1.02; width: 95%; }
 
         .photo-slot { 
-            width: 100%; background-color: #eee; background-size: cover; background-position: center; 
-            border: 3px solid white; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%; height: 100%;
+            background-size: cover; background-position: center; 
+            border: 4px solid white; box-shadow: 0 3px 6px rgba(0,0,0,0.15); border-radius: 6px;
         }
-        .grid-v2 .photo-slot, .grid-v4 .photo-slot { aspect-ratio: 4/3; }
-        .grid-grid .photo-slot { aspect-ratio: 1/1; }
 
-        /* --- Emoji เกาะมุมรูป --- */
-        .decor {
-            position: absolute; font-size: 40px; z-index: 10;
-            filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.3));
-            transition: all 0.3s ease;
-        }
-        .decor-tl { top: -20px; left: -20px; transform: rotate(-15deg); }
-        .decor-tr { top: -20px; right: -20px; transform: rotate(15deg); }
-        .decor-bl { bottom: -20px; left: -20px; transform: rotate(-15deg); }
-        .decor-br { bottom: -20px; right: -20px; transform: rotate(15deg); }
+        .decor { position: absolute; font-size: 35px; z-index: 10; filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.3)); transition: all 0.3s ease; }
+        .decor-tl { top: -15px; left: -15px; transform: rotate(-15deg); }
+        .decor-tr { top: -15px; right: -15px; transform: rotate(15deg); }
+        .decor-bl { bottom: -15px; left: -15px; transform: rotate(-15deg); }
+        .decor-br { bottom: -15px; right: -15px; transform: rotate(15deg); }
 
-        /* --- Camera & Buttons --- */
-        .camera-wrapper {
-            position: relative; width: 100%; padding-bottom: 133.33%; background: #000; 
-            border-radius: 15px; overflow: hidden; margin-bottom: 15px; border: 4px solid var(--pink-dark); 
-        }
+        .camera-wrapper { position: relative; width: 100%; padding-bottom: 133.33%; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 15px; border: 4px solid var(--pink-dark); }
         video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
-        #countdown {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 8rem; 
-            color: white; font-weight: 900; text-shadow: 4px 4px 0 var(--red-love); display: none;
-        }
+        #countdown { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 8rem; color: white; font-weight: 900; text-shadow: 4px 4px 0 var(--red-love); display: none; }
 
-        .btn-primary {
-            background: linear-gradient(to bottom, var(--pink-dark), var(--red-love)) !important;
-            color: white !important; border: 2px solid var(--red-love) !important;
-            padding: 15px 20px; border-radius: 50px; font-size: 1.2rem; font-weight: 700;
-            cursor: pointer; width: 100%; display: inline-block; box-sizing: border-box; margin-top: 10px; 
-            box-shadow: 0 4px 0 #8B0000; font-family: 'Mali', cursive;
-        }
+        .btn-primary { background: linear-gradient(to bottom, var(--pink-dark), var(--red-love)) !important; color: white !important; border: 2px solid var(--red-love) !important; padding: 15px 20px; border-radius: 50px; font-size: 1.2rem; font-weight: 700; cursor: pointer; width: 100%; display: inline-block; box-sizing: border-box; margin-top: 10px; box-shadow: 0 4px 0 #8B0000; font-family: 'Mali', cursive; text-decoration: none; }
         .btn-primary:active { transform: translateY(4px); box-shadow: 0 0 0 #8B0000 !important; }
-
+        .btn-primary:disabled { background: #ccc !important; border-color: #999 !important; box-shadow: none !important; color: #666 !important; }
         .emoji-options { display: flex; justify-content: space-around; font-size: 2rem; margin: 15px 0; cursor: pointer; }
         .emoji-btn:hover { transform: scale(1.3); transition: 0.2s; }
     </style>
@@ -156,7 +101,6 @@
         <section id="step-welcome" class="active">
             <h1>CVC YOUTH</h1>
             <p class="subtitle">💖 Valentine Photo Booth 2026 💖</p>
-            
             <div class="content-box">
                 <p style="color:#333; margin-bottom:10px; font-weight:700;">1. เลือกลายพื้นหลัง</p>
                 <div class="bg-selector">
@@ -165,7 +109,6 @@
                     <div class="bg-option" onclick="selectBg(this, '8.jpg')"><img src="8.jpg"></div>
                     <div class="bg-option" onclick="selectBg(this, '9.jpg')"><img src="9.jpg"></div>
                 </div>
-
                 <p style="color:#333; margin-bottom:10px; font-weight:700;">2. เลือกรูปแบบ</p>
                 <div class="layout-selector">
                     <button class="layout-btn" onclick="startCamera('v2', 2)">แนวตั้ง 2 ช่อง</button>
@@ -187,7 +130,7 @@
 
         <section id="step-edit" class="hidden">
             <div class="frame-container" id="preview-container">
-                <div class="photo-grid-wrapper">
+                <div id="photo-grid-wrapper" class="photo-grid-wrapper safe-area-6">
                     <div id="decor-tl" class="decor decor-tl"></div>
                     <div id="decor-tr" class="decor decor-tr"></div>
                     <div id="decor-bl" class="decor decor-bl"></div>
@@ -195,7 +138,6 @@
                     <div id="photo-grid" class="photo-grid"></div>
                 </div>
             </div>
-            
             <div class="content-box">
                 <p style="margin:0; font-weight:700; color:#333;">เลือก Emoji ตกแต่ง</p>
                 <div class="emoji-options">
@@ -206,19 +148,20 @@
                     <span class="emoji-btn" onclick="addEmoji('🍒')">🍒</span>
                     <span class="emoji-btn" onclick="addEmoji('')">❌</span>
                 </div>
-                <button class="btn-primary" id="save-btn" onclick="generateFinal()">บันทึกรูปภาพ 💌</button>
+                <button class="btn-primary" id="save-btn" onclick="generateFinal()">บันทึกรูปลง Server 💌</button>
                 <button style="background:none; border:none; color:gray; cursor:pointer; margin-top:15px; text-decoration:underline;" onclick="location.reload()">เริ่มใหม่</button>
             </div>
         </section>
 
         <section id="step-result" class="hidden">
             <div class="content-box">
-                <h2 style="color:var(--red-love);">เย้! ได้รูปแล้ว</h2>
-                <div id="qrcode" style="display:inline-block; padding:10px; background:white; border:2px solid var(--pink-dark); border-radius:10px; margin-bottom:10px;"></div>
-                <p style="margin:0 0 15px; font-size:0.9rem; color:var(--red-love); font-weight:700;">สแกนเพื่อส่งเว็บให้เพื่อน<br>(กดปุ่มด้านล่างเพื่อบันทึกรูปนี้)</p>
+                <h2 style="color:var(--red-love); margin-bottom: 5px;">เย้! อัปโหลดสำเร็จแล้ว</h2>
+                <p style="margin-top:0; font-size:0.9rem; color:var(--pink-dark);">สแกน QR Code นี้เพื่อโหลดรูปลงมือถือได้เลยครับ</p>
                 
+                <div id="qrcode" style="display:inline-block; padding:10px; background:white; border:2px solid var(--pink-dark); border-radius:10px; margin-bottom:15px;"></div>
                 <div id="final-image-show"></div>
-                <a id="download-link" class="btn-primary" style="text-decoration:none;">ดาวน์โหลดรูปภาพ</a>
+                
+                <a id="download-link" class="btn-primary">ดาวน์โหลดรูปนี้</a>
                 <button style="background:none; border:none; color:gray; cursor:pointer; margin-top:15px; text-decoration:underline;" onclick="location.reload()">ถ่ายอีกครั้ง</button>
             </div>
         </section>
@@ -282,6 +225,14 @@
             document.getElementById('step-camera').classList.add('hidden');
             document.getElementById('step-edit').classList.remove('hidden');
             document.getElementById('preview-container').style.backgroundImage = `url(${selectedBg})`;
+            
+            const wrapper = document.getElementById('photo-grid-wrapper');
+            wrapper.className = 'photo-grid-wrapper'; 
+            if(selectedBg === '6.jpg') wrapper.classList.add('safe-area-6');
+            else if(selectedBg === '7.jpg') wrapper.classList.add('safe-area-7');
+            else if(selectedBg === '8.jpg') wrapper.classList.add('safe-area-8');
+            else if(selectedBg === '9.jpg') wrapper.classList.add('safe-area-9');
+
             const grid = document.getElementById('photo-grid');
             grid.className = 'photo-grid ' + currentLayout.class;
             grid.innerHTML = photos.map(p => `<div class="photo-slot" style="background-image:url(${p})"></div>`).join('');
@@ -292,17 +243,50 @@
             ['tl','tr','bl','br'].forEach(pos => document.getElementById('decor-'+pos).innerText = e);
         }
 
+        // 🔥 อัปเดตฟังก์ชันเชื่อมต่อ Server Vercel Blob 🔥
         async function generateFinal() {
             const btn = document.getElementById('save-btn');
-            btn.innerText = "กำลังทำรูป..."; btn.disabled = true;
-            const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 3, useCORS: true });
-            const img = canvas.toDataURL('image/png');
-            document.getElementById('step-edit').classList.add('hidden');
-            document.getElementById('step-result').classList.remove('hidden');
-            document.getElementById('final-image-show').innerHTML = `<img src="${img}" style="width:100%; border-radius:10px;">`;
-            document.getElementById('download-link').href = img;
-            document.getElementById('download-link').download = `Valentine_CVC_${Date.now()}.png`;
-            new QRCode(document.getElementById("qrcode"), { text: window.location.href, width: 120, height: 120 });
+            const oldText = btn.innerText;
+            btn.innerText = "กำลังอัปโหลดขึ้นเซิร์ฟเวอร์... ⏳"; 
+            btn.disabled = true;
+
+            try {
+                // 1. แคปรูปภาพ
+                const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 3, useCORS: true });
+                const imageData = canvas.toDataURL('image/png');
+
+                // 2. ซ่อนหน้าแก้ไข โชว์หน้าโหลด
+                document.getElementById('step-edit').classList.add('hidden');
+                document.getElementById('step-result').classList.remove('hidden');
+                document.getElementById('final-image-show').innerHTML = `<p style="color:gray;">กำลังประมวลผล รอสักครู่นะครับ...</p>`;
+
+                // 3. ส่งรูปไปที่ API ของเรา
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: imageData })
+                });
+
+                if (!res.ok) throw new Error("อัปโหลดไม่สำเร็จ (เช็คว่า Vercel Blob ถูก Connect หรือยัง)");
+
+                const data = await res.json();
+                const uploadedUrl = data.url; // ได้ลิงก์จริงจาก Server แล้ว!
+
+                // 4. แสดงรูปและ QR Code ของจริง
+                document.getElementById('final-image-show').innerHTML = `<img src="${uploadedUrl}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
+                document.getElementById('download-link').href = uploadedUrl;
+                document.getElementById('download-link').download = `Valentine_CVC_${Date.now()}.png`;
+
+                document.getElementById("qrcode").innerHTML = "";
+                new QRCode(document.getElementById("qrcode"), { text: uploadedUrl, width: 140, height: 140, colorDark : "#c9184a", colorLight : "#ffffff" });
+
+            } catch (e) {
+                alert("แจ้งเตือน: " + e.message + "\n\n(แต่คุณยังสามารถกดค้างที่รูปเพื่อบันทึกได้ครับ)");
+                btn.innerText = oldText; 
+                btn.disabled = false;
+                document.getElementById('step-edit').classList.remove('hidden');
+                document.getElementById('step-result').classList.add('hidden');
+            }
         }
     </script>
 </body>
