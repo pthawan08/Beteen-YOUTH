@@ -24,7 +24,7 @@
 
         .container { 
             width: 100%; max-width: 550px; 
-            margin: 0 auto; /* จัดกึ่งกลางหน้าเว็บ */
+            margin: 0 auto; 
             position: relative; z-index: 1; 
         }
         
@@ -51,39 +51,37 @@
         .layout-btn { background: #fff; border: 2px solid var(--pink-light); border-radius: 15px; padding: 15px 10px; cursor: pointer; font-weight: 700; color: var(--red-love); font-family: 'Mali', cursive; transition: 0.2s; font-size: 1rem; }
         .layout-btn:hover { background: var(--pink-bg); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 
-        /* --- 🔥 กรอบรูป Photo Booth (รื้อโครงสร้างใหม่) 🔥 --- */
+        /* --- 🔥 กรอบรูป Photo Booth (ธีมวาเลนไทน์ & จัดกลางเป๊ะๆ) 🔥 --- */
         .frame-outer-wrapper {
-            /* ตัวห่อหุ้มด้านนอกสุด เพื่อจัดกึ่งกลาง */
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
+            width: 100%; display: flex; justify-content: center; margin-bottom: 30px;
         }
 
         .frame-container {
-            /* ตัวกระดาษสี */
-            background-color: #ffccd5;
-            /* บังคับขอบ 4 ด้านให้เท่ากันเป๊ะๆ ด้วย Padding */
-            padding: 25px !important; 
+            /* สีพื้นหลังกระดาษ */
+            background-color: #fff0f5; 
+            
+            /* 🔥 กรอบวาเลนไทน์: ขอบหนาสีชมพู + เงาสีแดง 2 ชั้น 🔥 */
+            border: 6px solid var(--pink-dark);
+            border-radius: 15px;
+            box-shadow:
+                0 0 0 5px var(--pink-light), /* เงาชั้นที่ 1 ทำหน้าที่เหมือนขอบอีกชั้น */
+                0 10px 30px rgba(201, 24, 74, 0.3); /* เงาหลักฟุ้งๆ */
+            
+            /* การจัดวางเนื้อหาข้างใน */
+            padding: 25px; /* ระยะห่างขอบกระดาษถึงรูป */
             box-sizing: border-box;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            display: flex; justify-content: center; align-items: center;
             position: relative;
-            /* ห้ามมี transform: rotate เด็ดขาด */
-            transform: none !important;
-            width: auto; /* ให้กว้างตามเนื้อหาข้างใน */
-            max-width: 100%;
+            width: auto; max-width: 100%;
         }
 
         /* Wrapper สำหรับจัดกลุ่มรูป */
         .photo-grid-wrapper {
-            /* กำหนดความกว้างของพื้นที่วางรูปให้ชัดเจน */
-            width: 300px; 
+            /* 🔥 กำหนดความกว้างตายตัว เพื่อให้จัดกลางได้แน่นอน! 🔥 */
+            width: 320px; /* ขนาดกำลังดีสำหรับมือถือ */
             max-width: 100%;
             position: relative; z-index: 5;
-            /* ทำให้แน่ใจว่าไม่มี margin แปลกปลอม */
-            margin: 0 !important;
-            display: block;
+            margin: auto; /* จัดกึ่งกลาง */
         }
 
         /* --- รูปแบบ Grid --- */
@@ -100,18 +98,11 @@
 
         .photo-slot { 
             width: 100%; height: auto; background-size: cover; background-position: center; 
-            border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-radius: 4px;
+            border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 4px;
         }
 
-        /* --- อีโมจิ (เอา rotation ออกให้หมด เพื่อความสมดุล) --- */
-        .decor { 
-            position: absolute; font-size: 38px; z-index: 10; 
-            filter: drop-shadow(2px 3px 3px rgba(0,0,0,0.15)); 
-            line-height: 1;
-            /* ตั้งตรง ไม่เอียง */
-            transform: none !important;
-        }
-        /* ปรับตำแหน่งให้เกาะมุมพอดีขอบ */
+        /* --- อีโมจิ (ไม่เอียง) --- */
+        .decor { position: absolute; font-size: 40px; z-index: 10; filter: drop-shadow(2px 3px 3px rgba(0,0,0,0.15)); line-height: 1; transform: none !important; }
         .decor-tl { top: -18px; left: -18px; }
         .decor-tr { top: -18px; right: -18px; }
         .decor-bl { bottom: -18px; left: -18px; }
@@ -129,7 +120,7 @@
         .emoji-options { display: flex; justify-content: center; gap: 20px; font-size: 2.2rem; margin: 20px 0; cursor: pointer; }
         .emoji-btn { transition: 0.2s; display: inline-block; }
         .emoji-btn:hover { transform: scale(1.2); }
-    </style>
+    </script>
 </head>
 <body>
 
