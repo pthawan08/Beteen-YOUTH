@@ -14,28 +14,37 @@
         }
 
         body {
-            font-family: 'Mali', cursive; margin: 0; text-align: center; display: flex; justify-content: center; min-height: 100vh;
+            font-family: 'Mali', cursive; margin: 0; text-align: center; 
+            /* ลบ display: flex ออก เพื่อใช้ margin auto แทน (ชัวร์กว่า) */
+            min-height: 100vh;
             background-color: var(--pink-bg);
-            /* พื้นหลังเว็บแบบคลีนๆ ไม่แย่งซีนรูป */
             background-image: radial-gradient(circle at center, #fff 0%, var(--pink-bg) 70%);
-            padding-top: 20px; padding-bottom: 40px; box-sizing: border-box; color: #333;
+            /* เพิ่ม Padding รอบตัว body เพื่อไม่ให้เนื้อหาชิดขอบจอเกินไป */
+            padding: 30px 20px; 
+            box-sizing: border-box; color: #333;
         }
 
-        .container { width: 100%; max-width: 550px; padding: 20px; box-sizing: border-box; position: relative; z-index: 1; }
+        .container { 
+            width: 100%; max-width: 550px; 
+            /* 🔥 คำสั่งศักดิ์สิทธิ์! จัดกึ่งกลางแนวนอนเป๊ะๆ 🔥 */
+            margin: 0 auto; 
+            position: relative; z-index: 1; 
+        }
+        
         .hidden { display: none !important; }
         .active { display: block !important; }
 
-        h1 { font-family: 'Satisfy', cursive; color: var(--red-love); font-size: 3.8rem; margin: 0; text-shadow: 2px 2px 0 var(--white); line-height: 1.1; }
-        .subtitle { color: var(--red-love); font-weight: 700; margin-bottom: 25px; font-size: 1.2rem; letter-spacing: 1px; }
+        h1 { font-family: 'Satisfy', cursive; color: var(--red-love); font-size: 3.8rem; margin: 0 0 10px 0; text-shadow: 2px 2px 0 var(--white); line-height: 1.1; }
+        .subtitle { color: var(--red-love); font-weight: 700; margin-bottom: 30px; font-size: 1.2rem; letter-spacing: 1px; }
         .section-title { color: #333; margin-bottom: 15px; font-weight: 700; font-size: 1.1rem; text-align: left; }
 
-        /* --- กล่องเนื้อหาแบบใหม่ คลีนๆ ไม่มีกรอบหนา --- */
+        /* --- กล่องเนื้อหาแบบใหม่ คลีนๆ --- */
         .content-box { 
             background: rgba(255, 255, 255, 0.95);
             border-radius: 25px; 
             padding: 30px; 
             box-shadow: 0 10px 40px rgba(201, 24, 74, 0.15); 
-            margin-bottom: 20px;
+            margin-bottom: 25px; /* เพิ่มระยะห่างระหว่างกล่อง */
         }
 
         /* --- เลือกสีพื้นหลัง --- */
@@ -48,15 +57,17 @@
         .layout-btn { background: #fff; border: 2px solid var(--pink-light); border-radius: 15px; padding: 15px 10px; cursor: pointer; font-weight: 700; color: var(--red-love); font-family: 'Mali', cursive; transition: 0.2s; font-size: 1rem; }
         .layout-btn:hover { background: var(--pink-bg); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 
-        /* --- 🔥 ตัว Photo Booth Strip ของจริง (ตั้งตรงเป๊ะๆ 100%) 🔥 --- */
+        /* --- 🔥 ตัว Photo Booth Strip ของจริง (ตั้งตรงเป๊ะๆ) 🔥 --- */
         .frame-container {
             width: 100%; max-width: 400px;
-            margin: 0 auto 25px auto;
+            /* จัดกึ่งกลางตัวกรอบรูปเองด้วย */
+            margin: 0 auto 30px auto;
             background-color: #ffccd5;
             padding: 25px; 
             box-sizing: border-box;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            /* ผมลบบรรทัด transform: rotate(-1deg); ออกไปแล้วจริงๆ ครับ! */
+            /* ยืนยันว่าไม่มี rotate */
+            transition: all 0.3s ease;
             display: flex; justify-content: center; align-items: center;
             position: relative;
         }
