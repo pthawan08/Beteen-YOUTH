@@ -24,7 +24,7 @@
 
         .container { 
             width: 100%; max-width: 550px; 
-            margin: 0 auto; 
+            margin: 0 auto; /* จัดกึ่งกลางหน้าเว็บ */
             position: relative; z-index: 1; 
         }
         
@@ -51,59 +51,71 @@
         .layout-btn { background: #fff; border: 2px solid var(--pink-light); border-radius: 15px; padding: 15px 10px; cursor: pointer; font-weight: 700; color: var(--red-love); font-family: 'Mali', cursive; transition: 0.2s; font-size: 1rem; }
         .layout-btn:hover { background: var(--pink-bg); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 
-        /* --- 🔥 ตัว Photo Booth Strip ของจริง (ตั้งตรง & ขอบเป๊ะ 1000%) 🔥 --- */
+        /* --- 🔥 กรอบรูป Photo Booth (รื้อโครงสร้างใหม่) 🔥 --- */
+        .frame-outer-wrapper {
+            /* ตัวห่อหุ้มด้านนอกสุด เพื่อจัดกึ่งกลาง */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
         .frame-container {
-            width: 100%; max-width: 400px;
-            margin: 0 auto 30px auto;
+            /* ตัวกระดาษสี */
             background-color: #ffccd5;
-            
-            /* คำสั่งศักดิ์สิทธิ์: ตีขอบ 30px เท่ากัน 4 ด้าน ห้ามเลื่อนห้ามขยับ! */
-            padding: 30px !important; 
+            /* บังคับขอบ 4 ด้านให้เท่ากันเป๊ะๆ ด้วย Padding */
+            padding: 25px !important; 
             box-sizing: border-box;
-            
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            display: block !important; /* ห้ามใช้ Flexbox เด็ดขาด */
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             position: relative;
+            /* ห้ามมี transform: rotate เด็ดขาด */
+            transform: none !important;
+            width: auto; /* ให้กว้างตามเนื้อหาข้างใน */
+            max-width: 100%;
         }
 
+        /* Wrapper สำหรับจัดกลุ่มรูป */
         .photo-grid-wrapper {
-            display: block !important;
-            width: 100%; 
+            /* กำหนดความกว้างของพื้นที่วางรูปให้ชัดเจน */
+            width: 300px; 
+            max-width: 100%;
+            position: relative; z-index: 5;
+            /* ทำให้แน่ใจว่าไม่มี margin แปลกปลอม */
             margin: 0 !important;
-            padding: 0 !important;
-            position: relative; 
-            z-index: 5;
+            display: block;
         }
 
-        .photo-grid { 
-            display: grid; 
-            width: 100%; 
-            margin: 0 !important; 
-            padding: 0 !important; 
-        }
+        /* --- รูปแบบ Grid --- */
+        .photo-grid { display: grid; width: 100%; margin: 0 auto; }
         
-        .grid-v2 { grid-template-columns: 1fr 1fr; gap: 12px; }
+        .grid-v2 { grid-template-columns: 1fr 1fr; gap: 10px; }
         .grid-v2 .photo-slot { aspect-ratio: 3 / 4; }
 
-        .grid-v4 { grid-template-columns: 1fr; gap: 10px; } 
+        .grid-v4 { grid-template-columns: 1fr; gap: 8px; } 
         .grid-v4 .photo-slot { aspect-ratio: 4 / 3; }
 
-        .grid-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
         .grid-grid .photo-slot { aspect-ratio: 4 / 3; }
 
         .photo-slot { 
-            width: 100%; height: auto; 
-            background-size: cover; background-position: center; 
-            border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 4px;
+            width: 100%; height: auto; background-size: cover; background-position: center; 
+            border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-radius: 4px;
         }
 
-        /* --- อีโมจิ --- */
-        .decor { position: absolute; font-size: 40px; z-index: 10; filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.2)); transition: all 0.3s ease; line-height: 1; }
-        .decor-tl { top: -20px; left: -20px; transform: rotate(-20deg); }
-        .decor-tr { top: -20px; right: -20px; transform: rotate(20deg); }
-        .decor-bl { bottom: -20px; left: -20px; transform: rotate(20deg); }
-        .decor-br { bottom: -20px; right: -20px; transform: rotate(-20deg); }
+        /* --- อีโมจิ (เอา rotation ออกให้หมด เพื่อความสมดุล) --- */
+        .decor { 
+            position: absolute; font-size: 38px; z-index: 10; 
+            filter: drop-shadow(2px 3px 3px rgba(0,0,0,0.15)); 
+            line-height: 1;
+            /* ตั้งตรง ไม่เอียง */
+            transform: none !important;
+        }
+        /* ปรับตำแหน่งให้เกาะมุมพอดีขอบ */
+        .decor-tl { top: -18px; left: -18px; }
+        .decor-tr { top: -18px; right: -18px; }
+        .decor-bl { bottom: -18px; left: -18px; }
+        .decor-br { bottom: -18px; right: -18px; }
 
         .camera-wrapper { position: relative; width: 100%; padding-bottom: 133.33%; background: #000; border-radius: 20px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
@@ -116,7 +128,7 @@
         
         .emoji-options { display: flex; justify-content: center; gap: 20px; font-size: 2.2rem; margin: 20px 0; cursor: pointer; }
         .emoji-btn { transition: 0.2s; display: inline-block; }
-        .emoji-btn:hover { transform: scale(1.4) rotate(10deg); }
+        .emoji-btn:hover { transform: scale(1.2); }
     </style>
 </head>
 <body>
@@ -159,13 +171,15 @@
         <section id="step-edit" class="hidden">
             <p class="section-title" style="text-align:center; margin-bottom: 20px;">✨ ได้รูปแล้ว! แต่งเลย ✨</p>
             
-            <div class="frame-container" id="preview-container">
-                <div id="photo-grid-wrapper" class="photo-grid-wrapper">
-                    <div id="decor-tl" class="decor decor-tl"></div>
-                    <div id="decor-tr" class="decor decor-tr"></div>
-                    <div id="decor-bl" class="decor decor-bl"></div>
-                    <div id="decor-br" class="decor decor-br"></div>
-                    <div id="photo-grid" class="photo-grid"></div>
+            <div class="frame-outer-wrapper">
+                <div class="frame-container" id="preview-container">
+                    <div id="photo-grid-wrapper" class="photo-grid-wrapper">
+                        <div id="decor-tl" class="decor decor-tl"></div>
+                        <div id="decor-tr" class="decor decor-tr"></div>
+                        <div id="decor-bl" class="decor decor-bl"></div>
+                        <div id="decor-br" class="decor decor-br"></div>
+                        <div id="photo-grid" class="photo-grid"></div>
+                    </div>
                 </div>
             </div>
             
@@ -194,7 +208,9 @@
                     <div id="qrcode" style="display:inline-block; padding:15px; background:white; border-radius:20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"></div>
                 </div>
                 
-                <div id="final-image-show" style="margin-bottom: 25px;"></div>
+                <div class="frame-outer-wrapper">
+                    <div id="final-image-show"></div>
+                </div>
                 
                 <a id="download-link" class="btn-primary">ดาวน์โหลดรูปนี้</a>
                 <button style="background:none; border:none; color:var(--pink-dark); cursor:pointer; margin-top:20px; text-decoration:underline; font-weight:700;" onclick="location.reload()">กลับไปหน้าแรก</button>
@@ -304,7 +320,7 @@
 
                     const data = await res.json();
                     
-                    document.getElementById('final-image-show').innerHTML = `<img src="${data.url}" style="width:100%; max-width:400px; border-radius:10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">`;
+                    document.getElementById('final-image-show').innerHTML = `<img src="${data.url}" style="width:100%; border-radius:12px; box-shadow: 0 5px 20px rgba(0,0,0,0.15);">`;
                     document.getElementById('download-link').href = data.url;
                     document.getElementById('download-link').download = `CVC_PhotoBooth_${Date.now()}.jpg`;
 
@@ -317,7 +333,7 @@
                     alert("⚠️ เซิร์ฟเวอร์มีปัญหาเล็กน้อย (แต่รูปเซฟได้ปกตินะ!)");
                     console.error("Upload Error:", err);
 
-                    document.getElementById('final-image-show').innerHTML = `<img src="${imageData}" style="width:100%; max-width:400px; border-radius:10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">`;
+                    document.getElementById('final-image-show').innerHTML = `<img src="${imageData}" style="width:100%; border-radius:12px; box-shadow: 0 5px 20px rgba(0,0,0,0.15);">`;
                     document.getElementById('download-link').href = imageData;
                     document.getElementById('download-link').download = `CVC_PhotoBooth_${Date.now()}.jpg`;
                     
