@@ -26,6 +26,8 @@
         }
 
         .container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; position: relative; z-index: 1; margin-top: 10px; }
+        
+        /* 🔥 โค้ดซ่อน/แสดงหน้าจอ (แก้บั๊กค้างแล้ว) 🔥 */
         .hidden { display: none !important; }
         .active { display: block !important; }
 
@@ -55,18 +57,17 @@
             position: relative; width: 100%; display: flex; align-items: center; justify-content: center; transition: all 0.3s;
         }
         
-        /* 🔥 ใช้เทคนิคขยับตำแหน่งแทนการตีกรอบ เพื่อให้รูปขยายได้เต็มที่ 🔥 */
-        .pos-6 { padding-bottom: 25%; } /* ซองจดหมาย ดันรูปขึ้น */
-        .pos-7 { padding-top: 8%; }    /* กรอบ 7 ดันรูปลงนิดหน่อย */
-        .pos-8 { padding-bottom: 8%; } /* กรอบ 8 ดันรูปขึ้นนิดหน่อย */
-        .pos-9 { padding-top: 15%; }   /* โพลารอยด์ ดันรูปลงมา */
+        .pos-6 { padding-bottom: 25%; } 
+        .pos-7 { padding-top: 8%; }    
+        .pos-8 { padding-bottom: 8%; } 
+        .pos-9 { padding-top: 15%; }   
 
-        /* --- Grid รูปถ่าย (ขยายใหญ่ขึ้น) --- */
+        /* --- Grid รูปถ่าย --- */
         .photo-grid { display: grid; gap: 8px; position: relative; z-index: 2; }
         .grid-v2 { grid-template-rows: repeat(2, 1fr); grid-template-columns: 100%; aspect-ratio: 4 / 6.2; width: 60%; }
         .grid-v4 { grid-template-rows: repeat(4, 1fr); grid-template-columns: 100%; aspect-ratio: 4 / 12.5; width: 45%; } 
-        /* 🔥 ขยาย 4 ช่องจัตุรัสให้ใหญ่สะใจ (88%) 🔥 */
-        .grid-grid { grid-template-rows: repeat(2, 1fr); grid-template-columns: repeat(2, 1fr); aspect-ratio: 1 / 1.02; width: 88%; }
+        /* ปรับขนาดตาราง 4 ช่องให้สวยงามพอดี */
+        .grid-grid { grid-template-rows: repeat(2, 1fr); grid-template-columns: repeat(2, 1fr); aspect-ratio: 1 / 1.02; width: 80%; }
 
         .photo-slot { 
             width: 100%; height: 100%; background-size: cover; background-position: center; 
@@ -152,5 +153,154 @@
             <div class="content-box">
                 <h2 style="color:var(--red-love); margin-bottom: 5px;">เย้! ได้รูปแล้ว</h2>
                 
-                <div id="qr-section">
-                    <p style="margin-top:0; font-size:0.9rem; color:var(--pink-dark);">สแกน QR Code นี้เพื่อโหลด
+                <div id="qr-section" class="hidden">
+                    <p style="margin-top:0; font-size:0.9rem; color:var(--pink-dark);">สแกน QR Code นี้เพื่อโหลดรูปลงมือถือ</p>
+                    <div id="qrcode" style="display:inline-block; padding:10px; background:white; border:2px solid var(--pink-dark); border-radius:10px; margin-bottom:15px;"></div>
+                </div>
+                
+                <div id="final-image-show"></div>
+                
+                <a id="download-link" class="btn-primary">ดาวน์โหลดรูปนี้ลงเครื่อง</a>
+                <button style="background:none; border:none; color:gray; cursor:pointer; margin-top:15px; text-decoration:underline;" onclick="location.reload()">ถ่ายอีกครั้ง</button>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <script>
+        let photos = [];
+        let stream = null;
+        let selectedBg = '6.jpg';
+        let currentLayout = { count: 4, class: 'grid-grid' };
+
+        // 🔥 ฟังก์ชันแก้หน้าค้าง สลับหน้าได้ชัวร์ 100% 🔥
+        function switchStep(hideId, showId) {
+            const hideEl = document.getElementById(hideId);
+            const showEl = document.getElementById(showId);
+            if(hideEl) { hideEl.classList.remove('active'); hideEl.classList.add('hidden'); }
+            if(showEl) { showEl.classList.remove('hidden'); showEl.classList.add('active'); }
+        }
+
+        function selectBg(el, bg) {
+            document.querySelectorAll('.bg-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedBg = bg;
+        }
+
+        async function startCamera(type, count) {
+            currentLayout = { count, class: type === 'grid' ? 'grid-grid' : (type === 'v4' ? 'grid-v4' : 'grid-v2') };
+            
+            // เปลี่ยนไปหน้ากล้อง
+            switchStep('step-welcome', 'step-camera');
+
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", aspectRatio: 4/3 } });
+                document.getElementById('video').srcObject = stream;
+                
+                const cd = document.getElementById('countdown');
+                photos = [];
+                for (let i = 1; i <= count; i++) {
+                    document.getElementById('status-text').innerText = `ยิ้มมม! รูปที่ ${i} / ${count}`;
+                    await new Promise(r => {
+                        let c = 3; cd.innerText = c; cd.style.display = 'block';
+                        const t = setInterval(() => {
+                            c--; if(c > 0) cd.innerText = c;
+                            else { clearInterval(t); cd.innerText = "📸"; r(); }
+                        }, 1000);
+                    });
+                    capture();
+                    await new Promise(r => setTimeout(r, 600));
+                    cd.style.display = 'none';
+                }
+                stream.getTracks().forEach(t => t.stop());
+                showEdit();
+            } catch (e) { alert("เกิดข้อผิดพลาดในการเปิดกล้อง ลองใหม่อีกครั้งครับ"); location.reload(); }
+        }
+
+        function capture() {
+            const v = document.getElementById('video');
+            const c = document.createElement('canvas');
+            c.width = v.videoWidth; c.height = v.videoHeight;
+            const ctx = c.getContext('2d');
+            ctx.translate(c.width, 0); ctx.scale(-1, 1);
+            ctx.drawImage(v, 0, 0);
+            photos.push(c.toDataURL('image/png'));
+        }
+
+        function showEdit() {
+            // เปลี่ยนไปหน้าตกแต่ง
+            switchStep('step-camera', 'step-edit');
+            
+            document.getElementById('preview-container').style.backgroundImage = `url(${selectedBg})`;
+            
+            const wrapper = document.getElementById('photo-grid-wrapper');
+            wrapper.className = 'photo-grid-wrapper'; 
+            if(selectedBg === '6.jpg') wrapper.classList.add('pos-6');
+            else if(selectedBg === '7.jpg') wrapper.classList.add('pos-7');
+            else if(selectedBg === '8.jpg') wrapper.classList.add('pos-8');
+            else if(selectedBg === '9.jpg') wrapper.classList.add('pos-9');
+
+            const grid = document.getElementById('photo-grid');
+            grid.className = 'photo-grid ' + currentLayout.class;
+            grid.innerHTML = photos.map(p => `<div class="photo-slot" style="background-image:url(${p})"></div>`).join('');
+            addEmoji('❤️');
+        }
+
+        function addEmoji(e) {
+            ['tl','tr','bl','br'].forEach(pos => document.getElementById('decor-'+pos).innerText = e);
+        }
+
+        async function generateFinal() {
+            const btn = document.getElementById('save-btn');
+            btn.innerText = "กำลังประมวลผล... ⏳"; 
+            btn.disabled = true;
+
+            try {
+                const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 3, useCORS: true });
+                const imageData = canvas.toDataURL('image/png');
+
+                // เปลี่ยนไปหน้ารับรูป
+                switchStep('step-edit', 'step-result');
+                document.getElementById('final-image-show').innerHTML = `<p style="color:gray;">กำลังเตรียมรูปภาพ...</p>`;
+
+                try {
+                    // ลองส่งรูปขึ้น Server Vercel
+                    const res = await fetch('/api/upload', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ image: imageData })
+                    });
+                    
+                    if (!res.ok) throw new Error("API Error");
+
+                    const data = await res.json();
+                    
+                    // ทำงานสำเร็จ (มี QR Code)
+                    document.getElementById('final-image-show').innerHTML = `<img src="${data.url}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
+                    document.getElementById('download-link').href = data.url;
+                    document.getElementById('download-link').download = `CVC_Valentine_${Date.now()}.png`;
+
+                    document.getElementById("qrcode").innerHTML = "";
+                    new QRCode(document.getElementById("qrcode"), { text: data.url, width: 140, height: 140, colorDark : "#c9184a", colorLight : "#ffffff" });
+                    document.getElementById('qr-section').classList.remove('hidden');
+
+                } catch (err) {
+                    // ⚠️ ระบบสำรอง: ถ้า Server พัง ให้โชว์รูปให้โหลดตรงๆ (รอดชัวร์ 100%)
+                    document.getElementById('final-image-show').innerHTML = `<img src="${imageData}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
+                    document.getElementById('download-link').href = imageData;
+                    document.getElementById('download-link').download = `CVC_Valentine_${Date.now()}.png`;
+                    document.getElementById('qr-section').classList.add('hidden'); // ซ่อน QR Code ที่พัง
+                }
+
+            } catch (e) {
+                alert("เกิดข้อผิดพลาดในการเซฟรูปภาพครับ");
+                switchStep('step-result', 'step-edit');
+                btn.innerText = "บันทึกรูปภาพ 💌"; 
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
