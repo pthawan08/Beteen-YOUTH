@@ -51,27 +51,17 @@
             position: absolute; display: flex; align-items: center; justify-content: center; transition: all 0.3s;
         }
         
-        /* ขยับพิกัดกรอบ */
         .pos-6 { top: 5%; bottom: 28%; left: 5%; right: 5%; } 
         .pos-7 { top: 12%; bottom: 4%; left: 4%; right: 4%; }  
         .pos-8 { top: 15%; bottom: 12%; left: 5%; right: 5%; } 
         .pos-9 { top: 20%; bottom: 6%; left: 10%; right: 10%; }
 
-        /* --- 🔥 Grid รูปถ่าย (แยกสัดส่วนให้แล้วครับ) 🔥 --- */
-        .photo-grid { 
-            display: grid; gap: 8px; position: relative; z-index: 2; 
-            margin: auto; 
-        }
-        
-        /* 2 ช่องแนวตั้ง: กว้าง 65% และล็อกสัดส่วนภาพ 4:3 */
+        /* --- Grid รูปถ่าย --- */
+        .photo-grid { display: grid; gap: 8px; position: relative; z-index: 2; margin: auto; }
         .grid-v2 { grid-template-columns: 1fr; width: 65%; }
         .grid-v2 .photo-slot { aspect-ratio: 4 / 3; }
-
-        /* 4 ช่องแนวตั้ง: กว้าง 45% และล็อกสัดส่วนภาพ 4:3 */
         .grid-v4 { grid-template-columns: 1fr; width: 45%; } 
         .grid-v4 .photo-slot { aspect-ratio: 4 / 3; }
-
-        /* ✅ 4 ช่องตาราง (Grid): กว้าง 95% และล็อกสัดส่วนเป็น 1:1 (จัตุรัส) */
         .grid-grid { grid-template-columns: 1fr 1fr; width: 95%; }
         .grid-grid .photo-slot { aspect-ratio: 1 / 1; }
 
@@ -256,12 +246,13 @@
 
         async function generateFinal() {
             const btn = document.getElementById('save-btn');
-            btn.innerText = "กำลังประมวลผล... ⏳"; 
+            btn.innerText = "กำลังอัปโหลด... ⏳"; 
             btn.disabled = true;
 
             try {
-                const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 1.5, useCORS: true });
-                const imageData = canvas.toDataURL('image/jpeg', 0.85);
+                // ลดขนาดรูปลงอีกเพื่อป้องกัน Payload Too Large
+                const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 1.2, useCORS: true });
+                const imageData = canvas.toDataURL('image/jpeg', 0.6);
 
                 switchStep('step-edit', 'step-result');
                 document.getElementById('final-image-show').innerHTML = `<p style="color:gray;">กำลังเตรียมรูปภาพ...</p>`;
@@ -274,8 +265,9 @@
                     });
                     
                     if (!res.ok) {
-                        const errDetails = await res.json();
-                        throw new Error(errDetails.error || "Server Upload Failed");
+                        // ดึงข้อความ Error จริงๆ ออกมา
+                        const errText = await res.text();
+                        throw new Error(`HTTP ${res.status}: ${errText}`);
                     }
 
                     const data = await res.json();
@@ -290,6 +282,9 @@
                     document.getElementById('qr-section').classList.remove('hidden');
 
                 } catch (err) {
+                    // 🔥 เด้งแจ้งเตือนบนหน้าจอเพื่อบอกสาเหตุให้เราทราบ! 🔥
+                    alert("🔍 สาเหตุที่เซิร์ฟเวอร์พังคือ:\n" + err.message + "\n\n(รบกวนแคปจอนี้ให้ผมดูหน่อยนะครับ!)");
+
                     console.error("API Error:", err);
                     document.getElementById('final-image-show').innerHTML = `<img src="${imageData}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
                     document.getElementById('download-link').href = imageData;
