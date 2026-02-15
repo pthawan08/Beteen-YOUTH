@@ -48,7 +48,7 @@
         .layout-btn { background: #fff; border: 2px solid var(--pink-light); border-radius: 15px; padding: 15px 10px; cursor: pointer; font-weight: 700; color: var(--red-love); font-family: 'Mali', cursive; transition: 0.2s; font-size: 1rem; }
         .layout-btn:hover { background: var(--pink-bg); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 
-        /* --- 🔥 ตัว Photo Booth Strip ของจริง (ตั้งตรง 100% ไม่มีเอียง) 🔥 --- */
+        /* --- 🔥 ตัว Photo Booth Strip ของจริง (ตั้งตรงเป๊ะๆ 100%) 🔥 --- */
         .frame-container {
             width: 100%; max-width: 400px;
             margin: 0 auto 25px auto;
@@ -56,8 +56,7 @@
             padding: 25px; 
             box-sizing: border-box;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            /* ลบคำสั่งเอียงออกแล้ว! รูปตรงเป๊ะแน่นอน */
-            transition: all 0.3s ease;
+            /* ผมลบบรรทัด transform: rotate(-1deg); ออกไปแล้วจริงๆ ครับ! */
             display: flex; justify-content: center; align-items: center;
             position: relative;
         }
