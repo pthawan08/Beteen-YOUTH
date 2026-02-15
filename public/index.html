@@ -44,36 +44,38 @@
             aspect-ratio: 2 / 3; width: 100%; max-width: 420px; margin: 0 auto 20px auto;
             background-color: white; background-size: cover; background-position: center;
             border-radius: 10px; position: relative; border: 2px solid var(--pink-dark);
-            overflow: hidden; 
+            overflow: hidden; display: flex;
         }
 
         .photo-grid-wrapper {
             position: absolute; display: flex; align-items: center; justify-content: center; transition: all 0.3s;
         }
         
-        /* ขยับพิกัดกรอบให้สมส่วน */
-        .pos-6 { top: 8%; bottom: 34%; left: 8%; right: 8%; } 
-        .pos-7 { top: 15%; bottom: 6%; left: 6%; right: 6%; }  
-        .pos-8 { top: 17%; bottom: 13%; left: 8%; right: 8%; } 
-        .pos-9 { top: 22%; bottom: 8%; left: 10%; right: 10%; }
+        /* ขยับพิกัดกรอบให้กว้างที่สุดเท่าที่จะทำได้ */
+        .pos-6 { top: 5%; bottom: 28%; left: 5%; right: 5%; } 
+        .pos-7 { top: 12%; bottom: 4%; left: 4%; right: 4%; }  
+        .pos-8 { top: 15%; bottom: 12%; left: 5%; right: 5%; } 
+        .pos-9 { top: 20%; bottom: 6%; left: 10%; right: 10%; }
 
-        /* --- 🔥 รูปแบบ Grid แก้ให้สมส่วน (หน้าไม่อ้วน ไม่ยืด) 🔥 --- */
-        .photo-grid { display: grid; gap: 10px; position: relative; z-index: 2; justify-content: center; align-content: center; width: 100%; max-height: 100%; }
+        /* --- 🔥 รูปแบบ Grid: ล็อกสัดส่วน 4:3 รูปไม่เบี้ยวแน่นอน 🔥 --- */
+        .photo-grid { 
+            display: grid; gap: 8px; position: relative; z-index: 2; 
+            margin: auto; /* จัดให้อยู่กึ่งกลางเสมอ */
+        }
         
-        /* 2 ช่อง: เรียงบน-ล่าง สัดส่วนกล้อง 4:3 เป๊ะๆ */
-        .grid-v2 { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; width: 65%; margin: 0 auto; }
-        .grid-v2 .photo-slot { aspect-ratio: 4 / 3; }
+        /* 2 ช่องแนวตั้ง: ขยายให้กว้าง 65% ของกรอบ */
+        .grid-v2 { grid-template-columns: 1fr; width: 65%; }
 
-        /* 4 ช่องแนวตั้ง: เรียงบน-ล่าง สัดส่วนกล้อง 4:3 เป๊ะๆ (เล็กลงมาหน่อยเพื่อให้พอดีกรอบ) */
-        .grid-v4 { grid-template-columns: 1fr; width: 42%; margin: 0 auto; } 
-        .grid-v4 .photo-slot { aspect-ratio: 4 / 3; }
+        /* 4 ช่องแนวตั้ง: ขยายให้กว้าง 45% (ใหญ่สุดที่จะใส่ 4 รูปในแนวตั้งได้แล้วครับ) */
+        .grid-v4 { grid-template-columns: 1fr; width: 45%; } 
 
-        /* 4 ช่องจัตุรัส: เต็มตาเหมือนเดิม (อันที่คุณชอบ) */
-        .grid-grid { grid-template-columns: 1fr 1fr; width: 95%; margin: 0 auto; }
-        .grid-grid .photo-slot { aspect-ratio: 4 / 3; }
+        /* 4 ช่องตาราง (Grid): เต็มตา 95% เหมือนเดิม (อันที่คุณชอบ) */
+        .grid-grid { grid-template-columns: 1fr 1fr; width: 95%; }
 
+        /* ล็อกสัดส่วน 4:3 ทุกลาย! */
         .photo-slot { 
-            width: 100%; height: auto; background-size: cover; background-position: center; 
+            width: 100%; aspect-ratio: 4 / 3; 
+            background-size: cover; background-position: center; 
             border: 4px solid white; box-shadow: 0 3px 6px rgba(0,0,0,0.15); border-radius: 6px;
         }
 
@@ -112,7 +114,7 @@
                 <div class="layout-selector">
                     <button class="layout-btn" onclick="startCamera('v2', 2)">แบบ 2 ช่อง</button>
                     <button class="layout-btn" onclick="startCamera('v4', 4)">แบบ 4 ช่องเรียง</button>
-                    <button class="layout-btn" onclick="startCamera('grid', 4)" style="grid-column: span 2;">แบบ 4 ช่อง (ตาราง)</button>
+                    <button class="layout-btn" onclick="startCamera('grid', 4)" style="grid-column: span 2;">แบบ 4 ช่อง (Grid)</button>
                 </div>
             </div>
         </section>
@@ -226,8 +228,6 @@
             const ctx = c.getContext('2d');
             ctx.translate(c.width, 0); ctx.scale(-1, 1);
             ctx.drawImage(v, 0, 0);
-            
-            // 🔥 แปลงเป็น JPEG เพื่อให้ไฟล์เบาลง อัปโหลดผ่านฉลุย 🔥
             photos.push(c.toDataURL('image/jpeg', 0.8));
         }
 
@@ -258,7 +258,6 @@
             btn.disabled = true;
 
             try {
-                // 🔥 ปรับ scale ลงเหลือ 1.5 และเปลี่ยนฟอร์แมตเป็น JPEG (ขนาดไฟล์จะเหลือแค่ประมาณ 500KB - 1MB ผ่านชัวร์!) 🔥
                 const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 1.5, useCORS: true });
                 const imageData = canvas.toDataURL('image/jpeg', 0.85);
 
@@ -276,6 +275,7 @@
 
                     const data = await res.json();
                     
+                    // สำเร็จ!
                     document.getElementById('final-image-show').innerHTML = `<img src="${data.url}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
                     document.getElementById('download-link').href = data.url;
                     document.getElementById('download-link').download = `CVC_Valentine_${Date.now()}.jpg`;
@@ -286,14 +286,13 @@
                     document.getElementById('qr-section').classList.remove('hidden');
 
                 } catch (err) {
-                    // ถ้ายังหลุดมา Fallback (เน็ตหลุด ฯลฯ) ก็ยังเซฟได้
+                    // ถ้าพัง โชว์รูปให้เซฟ และบอกตรงๆ ว่าสแกนไม่ได้
                     document.getElementById('final-image-show').innerHTML = `<img src="${imageData}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
                     document.getElementById('download-link').href = imageData;
                     document.getElementById('download-link').download = `CVC_Valentine_${Date.now()}.jpg`;
                     
-                    document.getElementById('qr-note').innerHTML = "<b>สแกน QR Code เพื่อชวนเพื่อนมาเล่น!</b><br><span style='font-size:0.8rem; color:gray;'>(โหลดไม่สำเร็จ แต่เซฟรูปได้ครับ)</span>";
-                    document.getElementById("qrcode").innerHTML = "";
-                    new QRCode(document.getElementById("qrcode"), { text: window.location.href, width: 120, height: 120, colorDark : "#ccc", colorLight : "#ffffff" });
+                    document.getElementById('qr-note').innerHTML = "<span style='color:red;'>⚠️ เซิร์ฟเวอร์อัปโหลดไม่ทำงาน</span><br><span style='font-size:0.8rem; color:gray;'>(กรุณากดปุ่มด้านล่างเพื่อเซฟรูปลงเครื่องแทนนะครับ)</span>";
+                    document.getElementById("qrcode").style.display = 'none'; // ซ่อน QR Code ทิ้งไปเลยจะได้ไม่งง
                     document.getElementById('qr-section').classList.remove('hidden');
                 }
 
