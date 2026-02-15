@@ -51,26 +51,25 @@
             position: absolute; display: flex; align-items: center; justify-content: center; transition: all 0.3s;
         }
         
-        /* 🔥 ขยับพิกัดกรอบให้พอดี ไม่ทะลุเส้นขอบขาวของรูปพื้นหลัง 🔥 */
         .pos-6 { top: 7%; bottom: 32%; left: 8%; right: 8%; } 
-        .pos-7 { top: 15%; bottom: 8%; left: 8%; right: 8%; } /* ดึง left/right เข้ามาไม่ให้ล้น */
+        .pos-7 { top: 15%; bottom: 8%; left: 8%; right: 8%; } 
         .pos-8 { top: 17%; bottom: 13%; left: 8%; right: 8%; } 
         .pos-9 { top: 22%; bottom: 8%; left: 10%; right: 10%; }
 
-        /* --- 🔥 จัด Layout ให้เป๊ะตามสไตล์ BeautyPlus และแบบดั้งเดิม 🔥 --- */
+        /* --- 🔥 แก้ไข Grid รูปถ่าย 🔥 --- */
         .photo-grid { 
             display: grid; position: relative; z-index: 2; margin: auto; 
         }
         
-        /* 1. แบบ 2 ช่อง: เรียงซ้าย-ขวา แบบตู้ถ่ายรูป (สัดส่วน 3:4) */
+        /* 1. แบบ 2 ช่อง: เรียงซ้าย-ขวา (สัดส่วน 3:4) */
         .grid-v2 { grid-template-columns: 1fr 1fr; width: 90%; gap: 12px; }
         .grid-v2 .photo-slot { aspect-ratio: 3 / 4; }
 
-        /* 2. แบบ 4 ช่องแนวตรง: เรียงบนลงล่าง (สัดส่วน 4:3) ขยายกำลังสวย */
+        /* 2. แบบ 4 ช่องแนวตรง: เรียงบนลงล่าง (สัดส่วน 4:3) */
         .grid-v4 { grid-template-columns: 1fr; width: 48%; gap: 8px; } 
         .grid-v4 .photo-slot { aspect-ratio: 4 / 3; }
 
-        /* 3. แบบ 4 ช่องตาราง: กลับมาเป็นทรงแนวนอน 4:3 ตามเดิมที่คุณชอบ! */
+        /* 3. แบบ 4 ช่องตาราง: กลับมาใช้ 4:3 (แนวนอน) เหมือนดั้งเดิม! */
         .grid-grid { grid-template-columns: 1fr 1fr; width: 92%; gap: 10px; }
         .grid-grid .photo-slot { aspect-ratio: 4 / 3; }
 
@@ -259,7 +258,6 @@
             btn.disabled = true;
 
             try {
-                // คงขนาดที่ 1.5 ภาพคมชัดและผ่าน Vercel แน่นอน
                 const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 1.5, useCORS: true });
                 const imageData = canvas.toDataURL('image/jpeg', 0.85);
 
@@ -290,6 +288,7 @@
                     document.getElementById('qr-section').classList.remove('hidden');
 
                 } catch (err) {
+                    // ลบแจ้งเตือน Alert ออก จะได้ไม่รกตา
                     console.error("API Error:", err);
                     document.getElementById('final-image-show').innerHTML = `<img src="${imageData}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
                     document.getElementById('download-link').href = imageData;
