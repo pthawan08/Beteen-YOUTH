@@ -16,89 +16,115 @@
         body {
             font-family: 'Mali', cursive; margin: 0; text-align: center; display: flex; justify-content: center; min-height: 100vh;
             background-color: var(--pink-bg);
-            background-image: repeating-linear-gradient(45deg, var(--pink-light) 0, var(--pink-light) 2px, var(--pink-bg) 2px, var(--pink-bg) 10px);
+            /* พื้นหลังเว็บแบบคลีนๆ ไม่แย่งซีนรูป */
+            background-image: radial-gradient(circle at center, #fff 0%, var(--pink-bg) 70%);
             padding-top: 20px; box-sizing: border-box; color: #333;
         }
 
-        .container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; position: relative; z-index: 1; margin-top: 10px; }
+        .container { width: 100%; max-width: 550px; padding: 20px; box-sizing: border-box; position: relative; z-index: 1; }
         .hidden { display: none !important; }
         .active { display: block !important; }
 
-        h1 { font-family: 'Satisfy', cursive; color: var(--red-love); font-size: 3.5rem; margin: 0; text-shadow: 2px 2px 0 var(--white); line-height: 1.1; }
-        .subtitle { color: var(--red-love); font-weight: 700; margin-bottom: 20px; font-size: 1.1rem; }
+        h1 { font-family: 'Satisfy', cursive; color: var(--red-love); font-size: 3.8rem; margin: 0; text-shadow: 2px 2px 0 var(--white); line-height: 1.1; }
+        .subtitle { color: var(--red-love); font-weight: 700; margin-bottom: 25px; font-size: 1.2rem; letter-spacing: 1px; }
         .section-title { color: #333; margin-bottom: 15px; font-weight: 700; font-size: 1.1rem; text-align: left; }
 
-        .content-box { background: var(--cream); border-radius: 20px; padding: 20px; border: 4px solid var(--pink-dark); box-shadow: 0 10px 30px rgba(201, 24, 74, 0.2); }
+        /* --- กล่องเนื้อหาแบบใหม่ คลีนๆ ไม่มีกรอบหนา --- */
+        .content-box { 
+            background: rgba(255, 255, 255, 0.95); /* สีขาวโปร่งแสงนิดๆ */
+            border-radius: 25px; 
+            padding: 30px; 
+            /* ลบกรอบสีชมพูออก เหลือแค่เงาฟุ้งๆ */
+            box-shadow: 0 10px 40px rgba(201, 24, 74, 0.15); 
+            margin-bottom: 20px;
+        }
 
         /* --- เลือกสีพื้นหลัง --- */
         .color-selector { display: flex; gap: 12px; margin-bottom: 25px; justify-content: center; flex-wrap: wrap; }
-        .color-option { width: 45px; height: 45px; border-radius: 50%; border: 4px solid white; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .color-option.selected { border-color: var(--red-love); transform: scale(1.15); box-shadow: 0 6px 12px rgba(201, 24, 74, 0.3); }
+        .color-option { width: 45px; height: 45px; border-radius: 50%; border: 3px solid white; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .color-option.selected { border-color: var(--red-love); transform: scale(1.15); box-shadow: 0 6px 12px rgba(201, 24, 74, 0.2); }
 
-        .layout-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .layout-btn { background: #fff; border: 2px solid var(--pink-light); border-radius: 10px; padding: 15px 10px; cursor: pointer; font-weight: 700; color: var(--red-love); font-family: 'Mali', cursive; transition: 0.2s; }
-        .layout-btn:hover { background: var(--pink-bg); transform: translateY(-3px); }
+        /* --- ปุ่มเลือก Layout --- */
+        .layout-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .layout-btn { background: #fff; border: 2px solid var(--pink-light); border-radius: 15px; padding: 15px 10px; cursor: pointer; font-weight: 700; color: var(--red-love); font-family: 'Mali', cursive; transition: 0.2s; font-size: 1rem; }
+        .layout-btn:hover { background: var(--pink-bg); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 
-        /* --- 🔥 กรอบพรีวิว (ล็อกให้อยู่กึ่งกลางเป๊ะๆ) 🔥 --- */
+        /* --- 🔥 ตัว Photo Booth Strip ของจริง (ไม่มีกรอบ) 🔥 --- */
         .frame-container {
-            aspect-ratio: 2 / 3; width: 100%; max-width: 420px; margin: 0 auto 20px auto;
-            background-color: #ffccd5; border-radius: 10px; position: relative; border: 2px solid var(--pink-dark);
-            display: flex; justify-content: center; align-items: center; /* ดึงของข้างในให้อยู่ตรงกลางเสมอ */
-            transition: background-color 0.3s ease;
-        }
+            width: 100%; max-width: 400px; /* กำหนดความกว้างสูงสุดให้พอดี */
+            margin: 0 auto 25px auto;
+            background-color: #ffccd5; /* สีพื้นหลังที่จะถูกเปลี่ยน */
+            /* ลบกรอบสีชมพูออก */
+            /* border: 2px solid var(--pink-dark); */
+            
+            /* Padding คือ "ขอบขาว" ของกระดาษโฟโต้บูท */
+            padding: 25px; 
+            box-sizing: border-box;
+            
+            /* ทำให้ดูเหมือนกระดาษลอยอยู่ */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transform: rotate(-2deg); /* เอียงนิดๆ ให้ดูเก๋ */
+            transition: all 0.3s ease;
 
-        /* ตัวห่อหุ้ม Grid เพื่อไม่ให้ติดขอบ */
-        .photo-grid-wrapper {
+            display: flex; justify-content: center; align-items: center;
             position: relative;
-            width: 85%; /* กำหนดความกว้างให้พอดี เพื่อเว้นขอบซ้ายขวา */
-            z-index: 5;
+        }
+        .frame-container:hover { transform: rotate(0deg) scale(1.02); } /* เอาเมาส์ชี้แล้วเด้งกลับมาตรง */
+
+        /* Wrapper สำหรับจัดกลุ่มรูป */
+        .photo-grid-wrapper {
+            width: 100%; /* ขยายเต็มพื้นที่ Padding ที่เหลือ */
+            position: relative; z-index: 5;
         }
 
-        /* --- รูปแบบ Grid --- */
-        .photo-grid { display: grid; width: 100%; margin: 0 auto; justify-content: center; }
+        /* --- รูปแบบ Grid (สัดส่วนเป๊ะเหมือนเดิม) --- */
+        .photo-grid { display: grid; width: 100%; margin: 0 auto; }
         
-        /* 1. แบบ 2 ช่อง: เรียงซ้ายขวา */
+        /* 1. แบบ 2 ช่อง: ซ้ายขวา */
         .grid-v2 { grid-template-columns: 1fr 1fr; gap: 12px; }
         .grid-v2 .photo-slot { aspect-ratio: 3 / 4; }
 
         /* 2. แบบ 4 ช่องเรียง: บนลงล่าง */
-        .grid-v4 { grid-template-columns: 1fr; gap: 8px; width: 60%; } 
+        .grid-v4 { grid-template-columns: 1fr; gap: 10px; } 
         .grid-v4 .photo-slot { aspect-ratio: 4 / 3; }
 
-        /* 3. แบบ 4 ช่องตาราง: แนวนอน 4:3 */
+        /* 3. แบบ 4 ช่องตาราง: 2x2 */
         .grid-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
         .grid-grid .photo-slot { aspect-ratio: 4 / 3; }
 
         .photo-slot { 
             width: 100%; height: auto; background-size: cover; background-position: center; 
-            border: 4px solid white; box-shadow: 0 3px 6px rgba(0,0,0,0.15); border-radius: 6px;
+            border: 3px solid white; /* ขอบขาวรอบรูปย่อย */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        /* --- 🔥 อีโมจิเกาะมุมกรอบ (กลับมาแล้ว!) 🔥 --- */
-        .decor { position: absolute; font-size: 35px; z-index: 10; filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.3)); transition: all 0.3s ease; }
-        .decor-tl { top: -15px; left: -15px; transform: rotate(-15deg); }
-        .decor-tr { top: -15px; right: -15px; transform: rotate(15deg); }
-        .decor-bl { bottom: -15px; left: -15px; transform: rotate(-15deg); }
-        .decor-br { bottom: -15px; right: -15px; transform: rotate(15deg); }
+        /* --- อีโมจิ --- */
+        .decor { position: absolute; font-size: 40px; z-index: 10; filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.2)); transition: all 0.3s ease; }
+        .decor-tl { top: -15px; left: -15px; transform: rotate(-20deg); }
+        .decor-tr { top: -15px; right: -15px; transform: rotate(20deg); }
+        .decor-bl { bottom: -15px; left: -15px; transform: rotate(20deg); }
+        .decor-br { bottom: -15px; right: -15px; transform: rotate(-20deg); }
 
-        .camera-wrapper { position: relative; width: 100%; padding-bottom: 133.33%; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 15px; border: 4px solid var(--pink-dark); }
+        .camera-wrapper { position: relative; width: 100%; padding-bottom: 133.33%; background: #000; border-radius: 20px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         #countdown { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 8rem; color: white; font-weight: 900; text-shadow: 4px 4px 0 var(--red-love); display: none; }
 
-        .btn-primary { background: linear-gradient(to bottom, var(--pink-dark), var(--red-love)) !important; color: white !important; border: 2px solid var(--red-love) !important; padding: 15px 20px; border-radius: 50px; font-size: 1.2rem; font-weight: 700; cursor: pointer; width: 100%; display: inline-block; box-sizing: border-box; margin-top: 10px; box-shadow: 0 4px 0 #8B0000; font-family: 'Mali', cursive; text-decoration: none; }
-        .btn-primary:active { transform: translateY(4px); box-shadow: 0 0 0 #8B0000 !important; }
-        .btn-primary:disabled { background: #ccc !important; border-color: #999 !important; box-shadow: none !important; color: #666 !important; }
+        .btn-primary { background: linear-gradient(45deg, var(--pink-dark), var(--red-love)) !important; color: white !important; border: none !important; padding: 18px 30px; border-radius: 50px; font-size: 1.3rem; font-weight: 700; cursor: pointer; width: 100%; display: inline-block; box-sizing: border-box; margin-top: 15px; box-shadow: 0 5px 15px rgba(201, 24, 74, 0.4); font-family: 'Mali', cursive; text-decoration: none; transition: 0.2s; }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(201, 24, 74, 0.6); }
+        .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 5px rgba(201, 24, 74, 0.4) !important; }
+        .btn-primary:disabled { background: #ccc !important; box-shadow: none !important; color: #666 !important; cursor: not-allowed; }
         
-        .emoji-options { display: flex; justify-content: space-around; font-size: 2rem; margin: 15px 0; cursor: pointer; }
-        .emoji-btn:hover { transform: scale(1.3); transition: 0.2s; }
-    </style>
+        .emoji-options { display: flex; justify-content: center; gap: 20px; font-size: 2.2rem; margin: 20px 0; cursor: pointer; }
+        .emoji-btn { transition: 0.2s; display: inline-block; }
+        .emoji-btn:hover { transform: scale(1.4) rotate(10deg); }
+    </script>
 </head>
 <body>
 
     <div class="container">
         <section id="step-welcome" class="active">
             <h1>CVC YOUTH</h1>
-            <p class="subtitle">💖 Valentine Photo Booth 2026 💖</p>
+            <p class="subtitle">✨ Valentine Photo Booth 2026 ✨</p>
             <div class="content-box">
                 <p class="section-title">1. เลือกสีพื้นหลัง</p>
                 <div class="color-selector">
@@ -126,11 +152,13 @@
                     <video id="video" autoplay playsinline></video>
                     <div id="countdown"></div>
                 </div>
-                <p id="status-text" style="font-weight: 700; color: var(--red-love);">เตรียมตัวนะ...</p>
+                <p id="status-text" style="font-weight: 700; color: var(--red-love); font-size: 1.2rem;">เตรียมตัวนะ... 📸</p>
             </div>
         </section>
 
         <section id="step-edit" class="hidden">
+            <p class="section-title" style="text-align:center; margin-bottom: 20px;">✨ ได้รูปแล้ว! แต่งเลย ✨</p>
+            
             <div class="frame-container" id="preview-container">
                 <div id="photo-grid-wrapper" class="photo-grid-wrapper">
                     <div id="decor-tl" class="decor decor-tl"></div>
@@ -142,7 +170,7 @@
             </div>
             
             <div class="content-box">
-                <p class="section-title" style="text-align:center; margin-top:0;">เลือกอีโมจิตกแต่งมุมกรอบ</p>
+                <p class="section-title" style="text-align:center;">เลือกอีโมจิ</p>
                 <div class="emoji-options">
                     <span class="emoji-btn" onclick="addEmoji('❤️')">❤️</span>
                     <span class="emoji-btn" onclick="addEmoji('🌹')">🌹</span>
@@ -152,21 +180,24 @@
                     <span class="emoji-btn" onclick="addEmoji('')">❌</span>
                 </div>
 
-                <button class="btn-primary" id="save-btn" onclick="generateFinal()">บันทึกรูปภาพ 💌</button>
-                <button style="background:none; border:none; color:gray; cursor:pointer; margin-top:15px; text-decoration:underline;" onclick="location.reload()">เริ่มใหม่</button>
+                <button class="btn-primary" id="save-btn" onclick="generateFinal()">บันทึกรูปภาพ 💖</button>
+                <button style="background:none; border:none; color:var(--pink-dark); cursor:pointer; margin-top:20px; text-decoration:underline; font-weight:700;" onclick="location.reload()">ถ่ายใหม่</button>
             </div>
         </section>
 
         <section id="step-result" class="hidden">
             <div class="content-box">
-                <h2 style="color:var(--red-love); margin-bottom: 5px;">เย้! ได้รูปแล้ว</h2>
-                <div id="qr-section" class="hidden">
-                    <p id="qr-note" style="margin-top:0; font-size:0.9rem; color:var(--pink-dark);">สแกน QR Code นี้เพื่อโหลดรูปลงมือถือ</p>
-                    <div id="qrcode" style="display:inline-block; padding:10px; background:white; border:2px solid var(--pink-dark); border-radius:10px; margin-bottom:15px;"></div>
+                <h2 style="color:var(--red-love); margin-bottom: 10px;">🎉 รูปมาแล้ววว! 🎉</h2>
+                
+                <div id="qr-section" class="hidden" style="margin-bottom: 25px;">
+                    <p id="qr-note" style="margin-top:0; font-size:1rem; color:var(--pink-dark); font-weight:700;">📱 สแกนเพื่อโหลดรูปลงมือถือ</p>
+                    <div id="qrcode" style="display:inline-block; padding:15px; background:white; border-radius:20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"></div>
                 </div>
-                <div id="final-image-show"></div>
-                <a id="download-link" class="btn-primary">ดาวน์โหลดรูปนี้ลงเครื่อง</a>
-                <button style="background:none; border:none; color:gray; cursor:pointer; margin-top:15px; text-decoration:underline;" onclick="location.reload()">ถ่ายอีกครั้ง</button>
+                
+                <div id="final-image-show" style="margin-bottom: 25px;"></div>
+                
+                <a id="download-link" class="btn-primary">ดาวน์โหลดรูปนี้</a>
+                <button style="background:none; border:none; color:var(--pink-dark); cursor:pointer; margin-top:20px; text-decoration:underline; font-weight:700;" onclick="location.reload()">กลับไปหน้าแรก</button>
             </div>
         </section>
     </div>
@@ -185,6 +216,7 @@
             const showEl = document.getElementById(showId);
             if(hideEl) { hideEl.classList.remove('active'); hideEl.classList.add('hidden'); }
             if(showEl) { showEl.classList.remove('hidden'); showEl.classList.add('active'); }
+            window.scrollTo(0, 0); // เลื่อนหน้าจอไปบนสุดเสมอ
         }
 
         function selectColor(el, color) {
@@ -204,7 +236,7 @@
                 const cd = document.getElementById('countdown');
                 photos = [];
                 for (let i = 1; i <= count; i++) {
-                    document.getElementById('status-text').innerText = `ยิ้มมม! รูปที่ ${i} / ${count}`;
+                    document.getElementById('status-text').innerText = `รูปที่ ${i} / ${count} ยิ้มหวานนน! 😄`;
                     await new Promise(r => {
                         let c = 3; cd.innerText = c; cd.style.display = 'block';
                         const t = setInterval(() => {
@@ -218,7 +250,7 @@
                 }
                 stream.getTracks().forEach(t => t.stop());
                 showEdit();
-            } catch (e) { alert("กล้องมีปัญหาจ้า!"); location.reload(); }
+            } catch (e) { alert("เกิดข้อผิดพลาดกับกล้อง! ลองรีเฟรชหน้าเว็บใหม่นะครับ"); location.reload(); }
         }
 
         function capture() {
@@ -228,7 +260,7 @@
             const ctx = c.getContext('2d');
             ctx.translate(c.width, 0); ctx.scale(-1, 1);
             ctx.drawImage(v, 0, 0);
-            photos.push(c.toDataURL('image/jpeg', 0.8));
+            photos.push(c.toDataURL('image/jpeg', 0.9));
         }
 
         function showEdit() {
@@ -239,26 +271,25 @@
             grid.className = 'photo-grid ' + currentLayout.class;
             grid.innerHTML = photos.map(p => `<div class="photo-slot" style="background-image:url(${p})"></div>`).join('');
             
-            // เรียกอีโมจิตอนเริ่มต้น
             addEmoji('❤️');
         }
 
-        // ฟังก์ชันเปลี่ยนอีโมจิ 4 มุม
         function addEmoji(e) {
             ['tl','tr','bl','br'].forEach(pos => document.getElementById('decor-'+pos).innerText = e);
         }
 
         async function generateFinal() {
             const btn = document.getElementById('save-btn');
-            btn.innerText = "กำลังอัปโหลด... ⏳"; 
+            btn.innerText = "กำลังปริ้นท์รูป... 🖨️"; 
             btn.disabled = true;
 
             try {
-                const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 1.5, useCORS: true });
-                const imageData = canvas.toDataURL('image/jpeg', 0.85);
+                // เพิ่ม scale เพื่อให้ภาพคมชัดขึ้นเวลาเซฟ
+                const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 2, useCORS: true, backgroundColor: null });
+                const imageData = canvas.toDataURL('image/jpeg', 0.95);
 
                 switchStep('step-edit', 'step-result');
-                document.getElementById('final-image-show').innerHTML = `<p style="color:gray;">กำลังเตรียมรูปภาพ...</p>`;
+                document.getElementById('final-image-show').innerHTML = `<p style="color:gray;">กำลังโหลด...</p>`;
 
                 try {
                     const res = await fetch('/api/upload', {
@@ -269,37 +300,39 @@
                     
                     if (!res.ok) {
                         const errText = await res.text();
-                        throw new Error(`โค้ด Error: ${res.status}\n\nข้อความ: ${errText}`);
+                        throw new Error(errText);
                     }
 
                     const data = await res.json();
                     
-                    document.getElementById('final-image-show').innerHTML = `<img src="${data.url}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
+                    // แสดงรูปผลลัพธ์แบบไม่มีกรอบ
+                    document.getElementById('final-image-show').innerHTML = `<img src="${data.url}" style="width:100%; max-width:400px; border-radius:10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">`;
                     document.getElementById('download-link').href = data.url;
-                    document.getElementById('download-link').download = `CVC_Valentine_${Date.now()}.jpg`;
+                    document.getElementById('download-link').download = `CVC_PhotoBooth_${Date.now()}.jpg`;
 
-                    document.getElementById('qr-note').innerText = "สแกน QR Code นี้เพื่อโหลดรูปลงมือถือ";
+                    document.getElementById('qr-note').innerText = "📱 สแกนเพื่อโหลดรูปลงมือถือ";
                     document.getElementById("qrcode").innerHTML = "";
-                    new QRCode(document.getElementById("qrcode"), { text: data.url, width: 140, height: 140, colorDark : "#c9184a", colorLight : "#ffffff" });
+                    new QRCode(document.getElementById("qrcode"), { text: data.url, width: 150, height: 150, colorDark : "#c9184a", colorLight : "#ffffff" });
                     document.getElementById('qr-section').classList.remove('hidden');
 
                 } catch (err) {
-                    alert("⚠️ การอัปโหลดล้มเหลว!\n\nสาเหตุที่เซิร์ฟเวอร์พัง:\n" + err.message + "\n\n(เช็คชื่อโฟลเดอร์ 'api' ใน GitHub ให้ดีนะครับ!)");
+                    alert("⚠️ เซิร์ฟเวอร์มีปัญหาเล็กน้อย (แต่รูปเซฟได้ปกตินะ!)");
+                    console.error("Upload Error:", err);
 
-                    document.getElementById('final-image-show').innerHTML = `<img src="${imageData}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
+                    document.getElementById('final-image-show').innerHTML = `<img src="${imageData}" style="width:100%; max-width:400px; border-radius:10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">`;
                     document.getElementById('download-link').href = imageData;
-                    document.getElementById('download-link').download = `CVC_Valentine_${Date.now()}.jpg`;
+                    document.getElementById('download-link').download = `CVC_PhotoBooth_${Date.now()}.jpg`;
                     
-                    document.getElementById('qr-note').innerHTML = "<span style='font-size:0.8rem; color:red;'>⚠️ เซิร์ฟเวอร์อัปโหลดพัง (แต่เซฟรูปได้ตามปกตินะครับ)</span><br><b>สแกน QR Code ด้านล่างเพื่อส่งเว็บให้เพื่อน!</b>";
+                    document.getElementById('qr-note').innerHTML = "สแกนเพื่อแชร์เว็บให้เพื่อนเล่น!";
                     document.getElementById("qrcode").innerHTML = "";
-                    new QRCode(document.getElementById("qrcode"), { text: window.location.href, width: 120, height: 120, colorDark : "#666", colorLight : "#ffffff" });
+                    new QRCode(document.getElementById("qrcode"), { text: window.location.href, width: 150, height: 150, colorDark : "#333", colorLight : "#ffffff" });
                     document.getElementById('qr-section').classList.remove('hidden');
                 }
 
             } catch (e) {
-                alert("เกิดข้อผิดพลาดในการสร้างรูปครับ");
+                alert("เกิดข้อผิดพลาดในการสร้างรูปครับ: " + e.message);
                 switchStep('step-result', 'step-edit');
-                btn.innerText = "บันทึกรูปภาพ 💌"; 
+                btn.innerText = "บันทึกรูปภาพ 💖"; 
                 btn.disabled = false;
             }
         }
