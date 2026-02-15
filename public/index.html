@@ -51,19 +51,28 @@
             position: absolute; display: flex; align-items: center; justify-content: center; transition: all 0.3s;
         }
         
-        .pos-6 { top: 5%; bottom: 28%; left: 5%; right: 5%; } 
-        .pos-7 { top: 12%; bottom: 4%; left: 4%; right: 4%; }  
-        .pos-8 { top: 15%; bottom: 12%; left: 5%; right: 5%; } 
-        .pos-9 { top: 20%; bottom: 6%; left: 10%; right: 10%; }
+        /* 🔥 ขยับพิกัดกรอบให้พอดี ไม่ทะลุเส้นขอบขาวของรูปพื้นหลัง 🔥 */
+        .pos-6 { top: 7%; bottom: 32%; left: 8%; right: 8%; } 
+        .pos-7 { top: 15%; bottom: 8%; left: 8%; right: 8%; } /* ดึง left/right เข้ามาไม่ให้ล้น */
+        .pos-8 { top: 17%; bottom: 13%; left: 8%; right: 8%; } 
+        .pos-9 { top: 22%; bottom: 8%; left: 10%; right: 10%; }
 
-        /* --- Grid รูปถ่าย --- */
-        .photo-grid { display: grid; gap: 8px; position: relative; z-index: 2; margin: auto; }
-        .grid-v2 { grid-template-columns: 1fr; width: 65%; }
-        .grid-v2 .photo-slot { aspect-ratio: 4 / 3; }
-        .grid-v4 { grid-template-columns: 1fr; width: 45%; } 
+        /* --- 🔥 จัด Layout ให้เป๊ะตามสไตล์ BeautyPlus และแบบดั้งเดิม 🔥 --- */
+        .photo-grid { 
+            display: grid; position: relative; z-index: 2; margin: auto; 
+        }
+        
+        /* 1. แบบ 2 ช่อง: เรียงซ้าย-ขวา แบบตู้ถ่ายรูป (สัดส่วน 3:4) */
+        .grid-v2 { grid-template-columns: 1fr 1fr; width: 90%; gap: 12px; }
+        .grid-v2 .photo-slot { aspect-ratio: 3 / 4; }
+
+        /* 2. แบบ 4 ช่องแนวตรง: เรียงบนลงล่าง (สัดส่วน 4:3) ขยายกำลังสวย */
+        .grid-v4 { grid-template-columns: 1fr; width: 48%; gap: 8px; } 
         .grid-v4 .photo-slot { aspect-ratio: 4 / 3; }
-        .grid-grid { grid-template-columns: 1fr 1fr; width: 95%; }
-        .grid-grid .photo-slot { aspect-ratio: 1 / 1; }
+
+        /* 3. แบบ 4 ช่องตาราง: กลับมาเป็นทรงแนวนอน 4:3 ตามเดิมที่คุณชอบ! */
+        .grid-grid { grid-template-columns: 1fr 1fr; width: 92%; gap: 10px; }
+        .grid-grid .photo-slot { aspect-ratio: 4 / 3; }
 
         .photo-slot { 
             width: 100%; height: auto;
@@ -250,9 +259,9 @@
             btn.disabled = true;
 
             try {
-                // ลดขนาดรูปลงอีกเพื่อป้องกัน Payload Too Large
-                const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 1.2, useCORS: true });
-                const imageData = canvas.toDataURL('image/jpeg', 0.6);
+                // คงขนาดที่ 1.5 ภาพคมชัดและผ่าน Vercel แน่นอน
+                const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 1.5, useCORS: true });
+                const imageData = canvas.toDataURL('image/jpeg', 0.85);
 
                 switchStep('step-edit', 'step-result');
                 document.getElementById('final-image-show').innerHTML = `<p style="color:gray;">กำลังเตรียมรูปภาพ...</p>`;
@@ -265,7 +274,6 @@
                     });
                     
                     if (!res.ok) {
-                        // ดึงข้อความ Error จริงๆ ออกมา
                         const errText = await res.text();
                         throw new Error(`HTTP ${res.status}: ${errText}`);
                     }
@@ -282,9 +290,6 @@
                     document.getElementById('qr-section').classList.remove('hidden');
 
                 } catch (err) {
-                    // 🔥 เด้งแจ้งเตือนบนหน้าจอเพื่อบอกสาเหตุให้เราทราบ! 🔥
-                    alert("🔍 สาเหตุที่เซิร์ฟเวอร์พังคือ:\n" + err.message + "\n\n(รบกวนแคปจอนี้ให้ผมดูหน่อยนะครับ!)");
-
                     console.error("API Error:", err);
                     document.getElementById('final-image-show').innerHTML = `<img src="${imageData}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
                     document.getElementById('download-link').href = imageData;
