@@ -18,7 +18,6 @@
             background-color: var(--pink-bg);
             background-image: repeating-linear-gradient(45deg, var(--pink-light) 0, var(--pink-light) 2px, var(--pink-bg) 2px, var(--pink-bg) 10px);
             padding-top: 20px; box-sizing: border-box; color: #333;
-            touch-action: none; /* กันหน้าจอเด้งตอนลากสติกเกอร์ */
         }
 
         .container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; position: relative; z-index: 1; margin-top: 10px; }
@@ -40,67 +39,47 @@
         .layout-btn { background: #fff; border: 2px solid var(--pink-light); border-radius: 10px; padding: 15px 10px; cursor: pointer; font-weight: 700; color: var(--red-love); font-family: 'Mali', cursive; transition: 0.2s; }
         .layout-btn:hover { background: var(--pink-bg); transform: translateY(-3px); }
 
-        /* --- 🔥 กรอบพรีวิว (แก้ไขการจัดกึ่งกลางใหม่) 🔥 --- */
+        /* --- 🔥 กรอบพรีวิว (ล็อกให้อยู่กึ่งกลางเป๊ะๆ) 🔥 --- */
         .frame-container {
-            aspect-ratio: 2 / 3; /* อัตราส่วนกรอบนอกรวม */
-            width: 100%; max-width: 420px; margin: 0 auto 20px auto;
+            aspect-ratio: 2 / 3; width: 100%; max-width: 420px; margin: 0 auto 20px auto;
             background-color: #ffccd5; border-radius: 10px; position: relative; border: 2px solid var(--pink-dark);
-            /* ใช้ Flexbox สั่งให้ของข้างในอยู่ตรงกลางเป๊ะๆ */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px; /* เว้นขอบเล็กน้อยเพื่อความสวยงาม */
-            box-sizing: border-box;
+            display: flex; justify-content: center; align-items: center; /* ดึงของข้างในให้อยู่ตรงกลางเสมอ */
             transition: background-color 0.3s ease;
-            overflow: hidden;
         }
 
-        /* Wrapper เป็นตัวกำหนดขอบเขตกลุ่มรูปภาพ */
+        /* ตัวห่อหุ้ม Grid เพื่อไม่ให้ติดขอบ */
         .photo-grid-wrapper {
-            /* กำหนดสัดส่วนของกลุ่มรูปภาพ (เช่น 3:4 ให้ดูเป็นทรงตั้งสวยๆ) */
-            aspect-ratio: 3 / 4;
-            /* ให้ขยายเต็มความสูงที่ container อนุญาต โดยรักษาอัตราส่วน */
-            width: auto;
-            height: 100%;
-            max-width: 100%; /* ห้ามกว้างเกิน container */
-            position: relative; z-index: 5;
-            display: flex; /* เพื่อให้ grid ข้างในขยายเต็ม */
+            position: relative;
+            width: 85%; /* กำหนดความกว้างให้พอดี เพื่อเว้นขอบซ้ายขวา */
+            z-index: 5;
         }
 
-        /* --- 🔥 รูปแบบ Grid (ปรับให้เต็มพื้นที่ wrapper) --- */
-        .photo-grid { 
-            display: grid; width: 100%; height: 100%;
-        }
+        /* --- รูปแบบ Grid --- */
+        .photo-grid { display: grid; width: 100%; margin: 0 auto; justify-content: center; }
         
-        /* 1. แบบ 2 ช่อง: ซ้ายขวา */
-        .grid-v2 { grid-template-columns: 1fr 1fr; gap: 15px; }
-        .grid-v2 .photo-slot { aspect-ratio: 3 / 4; width: 100%; height: auto; }
+        /* 1. แบบ 2 ช่อง: เรียงซ้ายขวา */
+        .grid-v2 { grid-template-columns: 1fr 1fr; gap: 12px; }
+        .grid-v2 .photo-slot { aspect-ratio: 3 / 4; }
 
         /* 2. แบบ 4 ช่องเรียง: บนลงล่าง */
-        .grid-v4 { grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); gap: 10px; } 
-        .grid-v4 .photo-slot { width: 100%; height: 100%; }
+        .grid-v4 { grid-template-columns: 1fr; gap: 8px; width: 60%; } 
+        .grid-v4 .photo-slot { aspect-ratio: 4 / 3; }
 
-        /* ✅ 3. แบบ 4 ช่องตาราง: 2x2 (แก้ใหม่ให้เต็มพื้นที่) */
-        .grid-grid { 
-            grid-template-columns: 1fr 1fr; 
-            grid-template-rows: repeat(2, 1fr); /* บังคับ 2 แถวเต็มความสูง */
-            gap: 10px; 
-        }
-        /* ให้ยืดตามแม่ ไม่ต้องกำหนด aspect-ratio เอง */
-        .grid-grid .photo-slot { width: 100%; height: 100%; }
+        /* 3. แบบ 4 ช่องตาราง: แนวนอน 4:3 */
+        .grid-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-grid .photo-slot { aspect-ratio: 4 / 3; }
 
         .photo-slot { 
-            background-size: cover; background-position: center; 
+            width: 100%; height: auto; background-size: cover; background-position: center; 
             border: 4px solid white; box-shadow: 0 3px 6px rgba(0,0,0,0.15); border-radius: 6px;
         }
 
-        /* --- สติกเกอร์ --- */
-        .sticker-palette-container { background: white; padding: 10px; border-radius: 15px; border: 2px solid var(--pink-light); margin-bottom: 15px; }
-        .sticker-palette { display: flex; gap: 15px; overflow-x: auto; padding: 5px; scrollbar-width: none; }
-        .sticker-palette::-webkit-scrollbar { display: none; }
-        .sticker-option { font-size: 2.5rem; cursor: pointer; transition: 0.2s; user-select: none; filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1)); }
-        .sticker-option:hover { transform: scale(1.2) rotate(5deg); }
-        .draggable-sticker { position: absolute; font-size: 3.5rem; z-index: 20; cursor: move; user-select: none; filter: drop-shadow(3px 3px 0px rgba(0,0,0,0.2)); touch-action: none; }
+        /* --- 🔥 อีโมจิเกาะมุมกรอบ (กลับมาแล้ว!) 🔥 --- */
+        .decor { position: absolute; font-size: 35px; z-index: 10; filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.3)); transition: all 0.3s ease; }
+        .decor-tl { top: -15px; left: -15px; transform: rotate(-15deg); }
+        .decor-tr { top: -15px; right: -15px; transform: rotate(15deg); }
+        .decor-bl { bottom: -15px; left: -15px; transform: rotate(-15deg); }
+        .decor-br { bottom: -15px; right: -15px; transform: rotate(15deg); }
 
         .camera-wrapper { position: relative; width: 100%; padding-bottom: 133.33%; background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 15px; border: 4px solid var(--pink-dark); }
         video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
@@ -109,6 +88,9 @@
         .btn-primary { background: linear-gradient(to bottom, var(--pink-dark), var(--red-love)) !important; color: white !important; border: 2px solid var(--red-love) !important; padding: 15px 20px; border-radius: 50px; font-size: 1.2rem; font-weight: 700; cursor: pointer; width: 100%; display: inline-block; box-sizing: border-box; margin-top: 10px; box-shadow: 0 4px 0 #8B0000; font-family: 'Mali', cursive; text-decoration: none; }
         .btn-primary:active { transform: translateY(4px); box-shadow: 0 0 0 #8B0000 !important; }
         .btn-primary:disabled { background: #ccc !important; border-color: #999 !important; box-shadow: none !important; color: #666 !important; }
+        
+        .emoji-options { display: flex; justify-content: space-around; font-size: 2rem; margin: 15px 0; cursor: pointer; }
+        .emoji-btn:hover { transform: scale(1.3); transition: 0.2s; }
     </style>
 </head>
 <body>
@@ -151,28 +133,24 @@
         <section id="step-edit" class="hidden">
             <div class="frame-container" id="preview-container">
                 <div id="photo-grid-wrapper" class="photo-grid-wrapper">
+                    <div id="decor-tl" class="decor decor-tl"></div>
+                    <div id="decor-tr" class="decor decor-tr"></div>
+                    <div id="decor-bl" class="decor decor-bl"></div>
+                    <div id="decor-br" class="decor decor-br"></div>
                     <div id="photo-grid" class="photo-grid"></div>
                 </div>
-                <div id="sticker-layer" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:20; pointer-events:none;"></div>
             </div>
             
             <div class="content-box">
-                <p class="section-title" style="text-align:center; margin-top:0;">จิ้มสติกเกอร์ แล้วลากแต่งรูปได้เลย!</p>
-                <div class="sticker-palette-container">
-                    <div class="sticker-palette">
-                        <span class="sticker-option" onclick="addSticker('💖')">💖</span>
-                        <span class="sticker-option" onclick="addSticker('🧸')">🧸</span>
-                        <span class="sticker-option" onclick="addSticker('🎀')">🎀</span>
-                        <span class="sticker-option" onclick="addSticker('🌹')">🌹</span>
-                        <span class="sticker-option" onclick="addSticker('✨')">✨</span>
-                        <span class="sticker-option" onclick="addSticker('🥺')">🥺</span>
-                        <span class="sticker-option" onclick="addSticker('🥰')">🥰</span>
-                        <span class="sticker-option" onclick="addSticker('🎉')">🎉</span>
-                        <span class="sticker-option" onclick="addSticker('🎂')">🎂</span>
-                        <span class="sticker-option" onclick="addSticker('🍒')">🍒</span>
-                    </div>
+                <p class="section-title" style="text-align:center; margin-top:0;">เลือกอีโมจิตกแต่งมุมกรอบ</p>
+                <div class="emoji-options">
+                    <span class="emoji-btn" onclick="addEmoji('❤️')">❤️</span>
+                    <span class="emoji-btn" onclick="addEmoji('🌹')">🌹</span>
+                    <span class="emoji-btn" onclick="addEmoji('🎀')">🎀</span>
+                    <span class="emoji-btn" onclick="addEmoji('🧸')">🧸</span>
+                    <span class="emoji-btn" onclick="addEmoji('🍒')">🍒</span>
+                    <span class="emoji-btn" onclick="addEmoji('')">❌</span>
                 </div>
-                <button style="background:#eee; border:none; color:#666; padding: 8px 15px; border-radius:20px; cursor:pointer; margin-bottom: 15px; font-family: 'Mali';" onclick="clearStickers()">❌ ลบสติกเกอร์ทั้งหมด</button>
 
                 <button class="btn-primary" id="save-btn" onclick="generateFinal()">บันทึกรูปภาพ 💌</button>
                 <button style="background:none; border:none; color:gray; cursor:pointer; margin-top:15px; text-decoration:underline;" onclick="location.reload()">เริ่มใหม่</button>
@@ -201,9 +179,6 @@
         let stream = null;
         let selectedColor = '#ffccd5';
         let currentLayout = { count: 4, class: 'grid-grid' };
-        
-        let activeSticker = null;
-        let initialX, initialY, currentX, currentY, xOffset = 0, yOffset = 0;
 
         function switchStep(hideId, showId) {
             const hideEl = document.getElementById(hideId);
@@ -263,70 +238,20 @@
             const grid = document.getElementById('photo-grid');
             grid.className = 'photo-grid ' + currentLayout.class;
             grid.innerHTML = photos.map(p => `<div class="photo-slot" style="background-image:url(${p})"></div>`).join('');
-        }
-
-        /* --- ระบบลากสติกเกอร์ --- */
-        function addSticker(emoji) {
-            const sticker = document.createElement('div');
-            sticker.className = 'draggable-sticker';
-            sticker.innerText = emoji;
-            sticker.style.pointerEvents = 'auto'; 
-            sticker.style.left = '50%';
-            sticker.style.top = '50%';
-            sticker.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 30 - 15}deg)`;
-
-            sticker.addEventListener('mousedown', dragStart, false);
-            sticker.addEventListener('touchstart', dragStart, {passive: false});
             
-            document.getElementById('sticker-layer').appendChild(sticker);
+            // เรียกอีโมจิตอนเริ่มต้น
+            addEmoji('❤️');
         }
 
-        function clearStickers() { document.getElementById('sticker-layer').innerHTML = ''; }
-
-        const container = document.getElementById('preview-container');
-        container.addEventListener('mousemove', drag, false);
-        container.addEventListener('touchmove', drag, {passive: false});
-        container.addEventListener('mouseup', dragEnd, false);
-        container.addEventListener('touchend', dragEnd, false);
-
-        function dragStart(e) {
-            if (e.target.classList.contains('draggable-sticker')) {
-                activeSticker = e.target;
-                if (e.type === "touchstart") {
-                    initialX = e.touches[0].clientX - xOffset;
-                    initialY = e.touches[0].clientY - yOffset;
-                } else {
-                    initialX = e.clientX - xOffset;
-                    initialY = e.clientY - yOffset;
-                }
-            }
+        // ฟังก์ชันเปลี่ยนอีโมจิ 4 มุม
+        function addEmoji(e) {
+            ['tl','tr','bl','br'].forEach(pos => document.getElementById('decor-'+pos).innerText = e);
         }
 
-        function drag(e) {
-            if (activeSticker) {
-                e.preventDefault();
-                if (e.type === "touchmove") {
-                    currentX = e.touches[0].clientX - initialX;
-                    currentY = e.touches[0].clientY - initialY;
-                } else {
-                    currentX = e.clientX - initialX;
-                    currentY = e.clientY - initialY;
-                }
-                xOffset = currentX; yOffset = currentY;
-                const currentRotation = activeSticker.style.transform.match(/rotate\(([^)]+)\)/);
-                const rotation = currentRotation ? currentRotation[0] : 'rotate(0deg)';
-                activeSticker.style.transform = `translate(calc(-50% + ${currentX}px), calc(-50% + ${currentY}px)) ${rotation}`;
-            }
-        }
-
-        function dragEnd(e) { initialX = currentX; initialY = currentY; activeSticker = null; }
-
-        /* --- ระบบบันทึกรูปและดักจับ Error 404 --- */
         async function generateFinal() {
             const btn = document.getElementById('save-btn');
             btn.innerText = "กำลังอัปโหลด... ⏳"; 
             btn.disabled = true;
-            activeSticker = null;
 
             try {
                 const canvas = await html2canvas(document.getElementById('preview-container'), { scale: 1.5, useCORS: true });
@@ -359,7 +284,6 @@
                     document.getElementById('qr-section').classList.remove('hidden');
 
                 } catch (err) {
-                    // 🔥 เด้ง Alert บอกปัญหา Error 404 ทันที 🔥
                     alert("⚠️ การอัปโหลดล้มเหลว!\n\nสาเหตุที่เซิร์ฟเวอร์พัง:\n" + err.message + "\n\n(เช็คชื่อโฟลเดอร์ 'api' ใน GitHub ให้ดีนะครับ!)");
 
                     document.getElementById('final-image-show').innerHTML = `<img src="${imageData}" style="width:100%; border-radius:10px; border:3px solid var(--pink-dark);">`;
